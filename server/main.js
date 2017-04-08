@@ -9,22 +9,9 @@ Meteor.methods({
     addMessage: function (messageData) {
         messageData.date = new Date();
         let text = messageData.text;
-        let username = messageData.username;
-        let color = messageData.color;
 
         Messages.insert({
             text,
-            username,
-            color,
-            createdAt: new Date(), // current time
-        });
-    },
-
-    addUser: function (userData) {
-        let username = userData.username;
-
-        Users.insert({
-            username,
             createdAt: new Date(), // current time
         });
     },

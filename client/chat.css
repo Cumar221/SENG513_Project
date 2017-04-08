@@ -1,0 +1,236 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+}
+
+html{
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    font-family:Arial, Sans-Serif;
+    margin-bottom:50px;
+    height: auto !important;
+}
+
+.row{
+    margin-top:40px;
+    padding: 0 10px;
+}
+
+.clickable{
+    cursor: pointer;
+}
+
+.panel-heading span {
+    margin-top: -20px;
+    font-size: 15px;
+}
+
+#chatChannelContainer{
+    background-color: #001f3f;
+    overflow: auto;
+    height: inherit;
+    width: 16.5%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin-top: 52px;
+    margin-bottom: 30px;
+    word-wrap: break-word;
+    color: inherit;
+}
+
+#chatMessagesContainer{
+    overflow: auto;
+    height: inherit;
+    margin-left: 16.5%;
+    width: 67%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-top: 52px;
+    margin-bottom: 30px;
+    word-wrap: break-word;
+    color: inherit;
+}
+
+#chatOnlineContainer{
+    background-color: darkslateblue;
+    overflow: auto;
+    height: inherit;
+    margin-left: 83.5%;
+    width: 16.5%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin-top: 52px;
+    margin-bottom: 30px;
+    word-wrap: break-word;
+    color: inherit;
+}
+
+#chatMessagesBottom {
+    background-color: #1d1e1f;
+    position: absolute;
+    width: 100%;
+}
+
+#chatMessagesInput {
+    box-sizing: border-box;
+    background: transparent;
+    border: none;
+    width: 80%;
+    font-size: 1em;
+    color: white !important;
+}
+
+#chatMessagesContent{
+    height: 95% !important;
+    overflow: auto;
+}
+
+.imgPreview{
+    width: 100%;
+}
+
+#footer {
+    background-color: #333;
+    position: absolute;
+    bottom: 0;
+    padding-top: 6px;
+    text-align: center;
+    height: 30px;
+    width: 100%;
+    overflow:hidden;
+}
+
+.ui-page {
+    background: inherit !important;
+    min-height: inherit !important;
+    top: auto !important;
+    position: inherit !important;
+}
+
+#customButton{
+    float: right;
+}
+
+ul#msgCSS {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 0rem !important;
+    background: inherit;
+}
+
+#msgCSS li {
+    /* color: white; */
+    position: relative;
+    list-style: none;
+    padding: 5px;
+    margin: 5px;
+    background: silver;
+    border: 2px solid silver;
+    border-radius: 1rem;
+    width: 50%;
+}
+
+#msgCSS li .text {
+    margin-left: 10px;
+}
+
+#msgCSS li.checked {
+    color: #888;
+}
+
+#msgCSS li.checked .text {
+    text-decoration: line-through;
+}
+
+#msgCSS li.private {
+    background: #eee;
+    border-color: #ddd;
+}
+
+ul#nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+#nav li {
+    float: left;
+}
+
+#nav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+#nav li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+.Collapsible {
+    background-color: #1d1e1f;
+    margin-bottom: 20px;
+}
+
+.Collapsible__contentInner {
+    padding: 10px;
+    border: 1px solid #ebebeb;
+    border-top: 0; }
+
+.Collapsible__contentInner p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 20px; }
+
+.Collapsible__contentInner p:last-child {
+    margin-bottom: 0; }
+
+.Collapsible__trigger {
+    display: block;
+    font-weight: 400;
+    text-decoration: none;
+    color: #333333;
+    position: relative;
+    border: 1px solid white;
+    padding: 10px;
+    background: #1d1e1f;
+    color: white; }
+
+.Collapsible__trigger:after {
+    font-family: 'FontAwesome';
+    content: '\f107';
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: block;
+    transition: transform 300ms; }
+
+.Collapsible__trigger.is-open:after {
+    transform: rotateZ(180deg); }
+
+.Collapsible__trigger.is-disabled {
+    opacity: 0.5;
+    background-color: grey; }
+
+.CustomTriggerCSS {
+    background-color: lightcoral;
+    transition: background-color 200ms ease; }
+
+.CustomTriggerCSS--open {
+    background-color: darkslateblue; }

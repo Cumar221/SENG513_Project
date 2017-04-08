@@ -5,24 +5,10 @@ import dateFormat from 'dateformat';
 export default class Message extends Component {
     render() {
         let time = new Date(this.props.message.createdAt.getTime());
-        var messageStyle;
-        const usernameStyle = {
-            color: this.props.message.color,
-        };
+        let date = new Date(this.props.message.createdAt.getDate());
 
-        if(this.props.message.username === this.props.test){
-            messageStyle = {
-                fontWeight: "bold",
-            };
-        }
-        else{
-            messageStyle = {
-                fontWeight: "normal",
-            };
-        }
-        console.log(this.props.message.username + " " + this.props.test );
         return (
-            <li style={messageStyle}>{dateFormat(time, "h:MM:ss TT")} <span style={usernameStyle}>{this.props.message.username}:</span> {this.props.message.text}</li>
+            <li>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] <br/> {this.props.message.text}</li>
         );
     }
 }

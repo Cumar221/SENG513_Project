@@ -1,4 +1,6 @@
 /*
+import { Mongo } from 'meteor/mongo';
+
 let imageStoreLarge = new FS.Store.Dropbox("imagesLarge", {
     key: "o84hlq4d662zz3d",
     secret: "owlj6lyrn64vst0",

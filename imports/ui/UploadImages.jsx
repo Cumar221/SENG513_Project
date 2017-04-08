@@ -57,23 +57,27 @@ export default class UploadImages extends Component{
         const imageResponse = JSON.parse(xhr.responseText);
         console.log(imageResponse);
 
+        Meteor.call('addMessage',{text: imageResponse.secure_url});
+
         let images = Object.assign([],this.state.images);
         images.push(imageResponse);
+
         this.setState({
             images: images
         });
     }
+
     render(){
         const list  =  this.state.images.map((image,i) => {
            return(
                <li key={i}>
-                    <img src={image.secure_url}/>
+                    <img className="imgPreview" src={image.secure_url}/>
                </li>
            )
         });
         return(
             <div>
-                <div className="messages">
+                <div className="ImageAttach">
                     <Dropzone
                         multiple={false}
                         accept="image/*"
