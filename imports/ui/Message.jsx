@@ -5,10 +5,31 @@ import dateFormat from 'dateformat';
 export default class Message extends Component {
     render() {
         let time = new Date(this.props.message.createdAt.getTime());
-        let date = new Date(this.props.message.createdAt.getDate());
+        let text = this.props.message.text;
+        let image = this.props.message.image;
+
+        console.log("------------------------->" + text );
+        console.log("llllllllllllllllllllllllll" + image );
+
+        if(image != undefined){
+            if(image.endsWith(".pdf")){
+                return (
+                    <li>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] <br/>
+                        <embed src={image} width="800px" height="800px" />
+                    </li>
+                );
+            }
+            else{
+                return (
+                    <li>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] <br/>
+                        <img className="imgPreview" src= {image}/>
+                    </li>
+                );
+            }
+        }
 
         return (
-            <li>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] <br/> {this.props.message.text}</li>
+            <li>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] <br/> {text}</li>
         );
     }
 }

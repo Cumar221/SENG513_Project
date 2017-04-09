@@ -58,7 +58,7 @@ body {
 }
 
 #chatOnlineContainer{
-    background-color: darkslateblue;
+    background-color: #001f3f;
     overflow: auto;
     height: inherit;
     margin-left: 83.5%;
@@ -93,15 +93,23 @@ body {
     overflow: auto;
 }
 
+.Dropzone{
+    position: absolute !important;
+    height: 91% !important;
+    width: 96% !important;
+    z-index: 1;
+}
+
 .imgPreview{
     width: 100%;
 }
 
 #footer {
     background-color: #333;
+    color: white;
     position: absolute;
     bottom: 0;
-    padding-top: 6px;
+    padding-top: 2px;
     text-align: center;
     height: 30px;
     width: 100%;

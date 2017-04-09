@@ -5,6 +5,7 @@ import { Messages } from '../api/messages.js';
 import Message from './Message.jsx';
 import Collapsible from 'react-collapsible';
 import UploadImages from './UploadImages.jsx';
+import Dropzone from 'react-dropzone';
 
 export class ChatPage extends Component{
     handleSubmit(event) {
@@ -13,6 +14,11 @@ export class ChatPage extends Component{
         Meteor.call('addMessage',{text: text});
         // Clear form
         ReactDOM.findDOMNode(this.refs.textInput).value = '';
+    }
+
+    onOpenClick(event){
+        event.preventDefault();
+        this.Dropzone.open();
     }
 
     renderMessages() {
@@ -59,16 +65,14 @@ export class ChatPage extends Component{
                 <div id="chatMessagesContainer">
                     <div id="chatMessagesContent">
                         <ul id="msgCSS">
-                            {this.renderMessages()}
                             <UploadImages/>
+                            {this.renderMessages()}
                         </ul>
                     </div>
                     <div id="chatMessagesBottom">
                         <form onSubmit={this.handleSubmit.bind(this)} >
                             <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here"/>
                             <button id="customButton">Send</button>
-                            <button id="customButton">Image</button>
-                            <button id="customButton">GIF</button>
                         </form>
                     </div>
                 </div>
