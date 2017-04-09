@@ -11,16 +11,11 @@ export default class UploadImages extends Component{
         super(props);
     }
 
-    uploadImage(files){
-        this.setState({
-            uploadedFile: files[0]
-        });
-
-        this.handleImageUpload(files[0]);
-        console.log('uploadFile: ');
+    upload(files){
+        this.handleUpload(files[0]);
     }
 
-    handleImageUpload(file) {
+    handleUpload(file) {
         const data = new FormData();
         data.append('file', file);
         data.append('upload_preset', UPLOADPRESET);
@@ -29,10 +24,9 @@ export default class UploadImages extends Component{
         const xhr = new XMLHttpRequest();
         xhr.open('POST', URL, false);
         xhr.send(data);
-        const imageResponse = JSON.parse(xhr.responseText);
-        console.log(imageResponse.secure_url);
+        const fileResponse = JSON.parse(xhr.responseText);
 
-        Meteor.call('addMessage',{image: imageResponse.secure_url});
+        Meteor.call('addMessage',{file: fileResponse.secure_url});
     }
 
     render(){
@@ -41,7 +35,7 @@ export default class UploadImages extends Component{
                 <div className="ImageAttach">
                     <Dropzone
                         multiple={false}
-                        onDrop={this.uploadImage.bind(this)}>
+                        onDrop={this.upload.bind(this)}>
                         <div>Try dropping some files here, or click to select files to upload.</div>
                     </Dropzone>
                 </div>

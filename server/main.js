@@ -6,11 +6,11 @@ Meteor.methods({
     addMessage: function (messageData) {
         messageData.date = new Date();
         let text = messageData.text;
-        let image = messageData.image;
+        let file = messageData.file;
 
         Messages.insert({
             text,
-            image,
+            file,
             createdAt: new Date(), // current time
         });
     },

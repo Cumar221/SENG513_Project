@@ -6,23 +6,20 @@ export default class Message extends Component {
     render() {
         let time = new Date(this.props.message.createdAt.getTime());
         let text = this.props.message.text;
-        let image = this.props.message.image;
+        let file = this.props.message.file;
 
-        console.log("------------------------->" + text );
-        console.log("llllllllllllllllllllllllll" + image );
-
-        if(image != undefined){
-            if(image.endsWith(".pdf")){
+        if(file != undefined){
+            if(file.endsWith(".pdf")){
                 return (
                     <li>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] <br/>
-                        <embed src={image} width="800px" height="800px" />
+                        <embed src={file} width="800px" height="800px" />
                     </li>
                 );
             }
             else{
                 return (
                     <li>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] <br/>
-                        <img className="imgPreview" src= {image}/>
+                        <img className="imgPreview" src= {file}/>
                     </li>
                 );
             }
