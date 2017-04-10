@@ -5,6 +5,7 @@ import { Messages } from '../api/messages.js';
 import Message from './Message.jsx';
 import Collapsible from 'react-collapsible';
 import Upload from './Upload.jsx';
+import {Link} from "react-router-dom";
 
 export class ChatPage extends Component{
     handleSubmit(event) {
@@ -27,7 +28,7 @@ export class ChatPage extends Component{
                 <div id="header">
                     <ul id="nav">
                         <li><a href="#Account">Account</a></li>
-                        <li><a href="#SignOut">Sign Out</a></li>
+                        <li><Link to="/">Sign Out</Link></li>
                     </ul>
                 </div>
                 <div id="chatChannelContainer">

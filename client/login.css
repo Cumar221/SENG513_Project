@@ -1,0 +1,94 @@
+/* CSS declarations go here */
+body {
+    background-color:#566771 !important;
+    font-family: sans-serif;
+    background-attachment: fixed;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.container{
+    background-color:#566771 ;
+    min-width: 100%;
+    min-height: 200%;
+}
+.Main {
+    background: #566771;
+    color: #90a6b8;
+    font-size: large;
+    width: 34%;
+    padding-top: 10%;
+    margin: 0 auto;
+    min-height: 100%;
+
+}
+.userField{
+    background: #566771;
+    float: left;
+    text-align: right;
+    padding-left: 20%;
+
+}
+.logInButton{
+    padding-top: 15%;
+    text-align: center;
+
+}
+
+#uname{
+    border: hidden;
+    color: black;
+    background: #6e7e8b;
+
+}
+#pass{
+    border: hidden;
+    background: #6e7e8b;
+    color: black;
+}
+#login, #register{
+    width: 190px;
+    height: 40px;
+    background: #328dc6;
+    border: hidden;
+    color: black;
+}
+
+
+
+.registrationField {
+    background: #566771;
+    float: left;
+    text-align: right;
+
+
+}
+.register{
+    margin-top: 5%;
+    padding-right: 10%;
+}
+
+.UItem1, .UItem2, .UItem3, .UItem4 {
+    padding: 10px;
+}
+
+input::-webkit-input-placeholder{
+    color:#999999;
+}
+input:-moz-placeholder {
+    color:#999999;
+}
+#error{
+    color: #d00013;
+}
+
+
+
+
+

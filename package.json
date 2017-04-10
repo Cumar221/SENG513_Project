@@ -19,6 +19,8 @@
     "react-dom": "^15.4.2",
     "react-dropzone": "^3.12.2",
     "react-http-request": "^1.0.3",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0",
     "reactstrap": "^4.2.0",
     "sha1": "^1.1.1",
     "superagent": "^3.5.2"
