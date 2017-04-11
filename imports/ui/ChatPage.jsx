@@ -8,7 +8,9 @@ import Upload from './Upload.jsx';
 import {Link} from "react-router-dom";
 
 export class ChatPage extends Component{
+
     handleSubmit(event) {
+        console.log(this.props.location.state.currentUID);
         event.preventDefault();
         const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
         Meteor.call('addMessage',{text: text});
@@ -27,7 +29,7 @@ export class ChatPage extends Component{
             <div>
                 <div id="header">
                     <ul id="nav">
-                        <li><a href="#Account">Account</a></li>
+                        <li><Link to={'/Account/'+this.props.location.state.currentUID }>Account</Link></li>
                         <li><Link to="/">Sign Out</Link></li>
                     </ul>
                 </div>
