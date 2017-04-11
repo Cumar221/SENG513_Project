@@ -63,7 +63,7 @@ class Login extends Component {
                     <br></br>
                     <div className="logInButton">
 
-                        forgot password?
+                        <Link to="/forgotPass">Forgot your password?</Link>
                         <br></br>
                         <br></br>
                         <input type="submit" value="Login" name="login" id="login"/>

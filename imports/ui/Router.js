@@ -8,6 +8,7 @@ import Login from "./Login.jsx";
 import Register from "./Register.jsx";
 import ChatPage from "./ChatPage.jsx";
 import Account from "./Account.jsx";
+import ForgotPass from "./ForgotPass.jsx";
 
 Meteor.startup(() => {
     function requireAuth(nextState, replace) {
@@ -22,6 +23,7 @@ Meteor.startup(() => {
                 <Route exact={true} path="/" component={Login} />
                 <Route path="/register" component={Register}  onEnter={requireAuth}/>
                 <Route path="/chatPage" component={ChatPage} />
+                <Route path="/forgotPass" component={ForgotPass} />
                 <Route name="Account" path="/Account/:value" component={Account} />
             </div>
         </Router>,
