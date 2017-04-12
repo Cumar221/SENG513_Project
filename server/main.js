@@ -27,6 +27,18 @@ Meteor.methods({
             createdAt: new Date(), // current time
         });
     },
+
+    updateUsername: function(id, uname){
+        AllUsers.update({_id : id},{$set:{uname: uname}});
+    },
+
+    updateEmail: function(id, email){
+        AllUsers.update({_id : id},{$set:{email: email}});
+    },
+
+    updatePassword: function(id, pass){
+        AllUsers.update({_id : id},{$set:{pass: pass}});
+    },
 });
 
 Meteor.startup(() => {

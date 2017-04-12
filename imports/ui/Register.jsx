@@ -23,6 +23,17 @@ class Register extends Component {
         return flag;
     }
 
+    verifyEmail(email){
+        let flag = true;
+
+        for(var i = 0; i< this.allUsers().length; i++){
+            if(this.allUsers()[i].email === email){
+                flag = false;
+            }
+        }
+        return flag;
+    }
+
     handleSubmit(event){
         event.preventDefault();
         let username = event.target.username.value;
@@ -34,9 +45,14 @@ class Register extends Component {
 
             if(pass1 === pass2){
                 if(this.verifyUsername(username)){
-                    Meteor.call("addNewUser", {uname: username, email: email, pass: pass1});
-                    console.log("Added: "+username+"  "+pass1+ "  "+email);
-                    this.props.history.push('/');
+                    if(this.verifyEmail(email)){
+                        Meteor.call("addNewUser", {uname: username, email: email, pass: pass1});
+                        console.log("Added: "+username+"  "+pass1+ "  "+email);
+                        this.props.history.push('/');
+                    }else{
+                        console.log("email Already Taken");
+                    }
+
                 }else{
                     console.log("Username Already Taken");
                 }

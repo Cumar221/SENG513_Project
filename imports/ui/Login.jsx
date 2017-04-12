@@ -41,7 +41,10 @@ class Login extends Component {
         console.log("Authentication: "+ verify);
 
         if(verify == true) {
-            this.props.history.push('/chatPage');
+            this.props.history.push({pathname:'/chatPage',
+                                     state:{currentUID: uname}});
+
+
         }
 
     }
@@ -60,7 +63,7 @@ class Login extends Component {
                     <br></br>
                     <div className="logInButton">
 
-                        forgot password?
+                        <Link to="/forgotPass">Forgot your password?</Link>
                         <br></br>
                         <br></br>
                         <input type="submit" value="Login" name="login" id="login"/>
