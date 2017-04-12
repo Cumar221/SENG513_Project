@@ -127,6 +127,23 @@ body {
     float: right;
 }
 
+ul#onlineUser {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 0rem !important;
+    background: inherit;
+}
+
+#onlineUser li {
+    color: white;
+    list-style: none;
+    padding: 5px;
+    margin: 5px;
+}
+#onlineUser li a:hover:not(.active) {
+    background-color: #111;
+}
+
 ul#msgCSS {
     margin: 0;
     padding: 0;

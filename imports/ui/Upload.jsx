@@ -26,7 +26,7 @@ export default class UploadImages extends Component{
         xhr.send(data);
         const fileResponse = JSON.parse(xhr.responseText);
 
-        Meteor.call('addMessage',{file: fileResponse.secure_url});
+        Meteor.call('addMessage',{file: fileResponse.secure_url, uname: this.props.uname});
     }
 
     render(){

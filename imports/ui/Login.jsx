@@ -43,10 +43,7 @@ class Login extends Component {
         if(verify == true) {
             this.props.history.push({pathname:'/chatPage',
                                      state:{currentUID: uname}});
-
-
         }
-
     }
     render() {
         return(
