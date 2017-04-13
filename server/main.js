@@ -3,6 +3,7 @@ import '../imports/api/messages.js';
 import { Messages } from '../imports/api/messages.js';
 import { AllUsers } from '../imports/api/allUsers.js';
 import { OnlineUsers } from '../imports/api/onlineUsers.js';
+import { AllGroups } from '../imports/api/allGroups.js';
 
 
 Meteor.methods({
@@ -50,6 +51,14 @@ Meteor.methods({
 
     updatePassword: function(id, pass){
         AllUsers.update({_id : id},{$set:{pass: pass}});
+    },
+    newGroup: function(groupName, members, admins, owner){
+        AllGroups.insert({
+            owner: owner,
+            groupName: groupName,
+            members: members,
+            admins: admins
+        });
     },
 });
 
