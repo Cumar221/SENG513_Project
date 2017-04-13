@@ -16,6 +16,7 @@ Meteor.methods({
             uname,
             email,
             pass,
+            friends: [],
         });
     },
 
@@ -52,6 +53,11 @@ Meteor.methods({
     updatePassword: function(id, pass){
         AllUsers.update({_id : id},{$set:{pass: pass}});
     },
+
+    addFriend: function(id, friendList){
+        AllUsers.update({_id : id},{$set:{friends: friendList}});
+    },
+
     newGroup: function(groupName, members, admins, owner){
         AllGroups.insert({
             owner: owner,

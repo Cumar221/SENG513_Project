@@ -260,3 +260,7 @@ ul#nav {
 .CustomTriggerCSS--open {
     background-color: darkslateblue; }
 
+#addFriends{
+    color: white;
+    padding-right: 15px;
+}

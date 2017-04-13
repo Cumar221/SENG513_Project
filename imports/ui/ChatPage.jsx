@@ -6,12 +6,13 @@ import Message from './Message.jsx';
 import OnlineUser from './OnlineUser.jsx';
 import { AllGroups } from '../api/allGroups.js';
 import { OnlineUsers } from '../api/onlineUsers.js';
+import {AllUsers} from "../api/allUsers.js";
 import Collapsible from 'react-collapsible';
 import Upload from './Upload.jsx';
 import { Link } from "react-router-dom";
 import ToggleDisplay from 'react-toggle-display';
 import Groups from "./Groups.jsx";
-
+import Friends from "./Friends.jsx";
 
 let test = [{
     client1: "test1",
@@ -33,6 +34,14 @@ export class ChatPage extends Component{
 
     allGroups(){
         return AllGroups.find().fetch();
+    }
+
+    allUsers(){
+        return AllUsers.find().fetch();
+    }
+
+    onlineUsers(){
+        return OnlineUsers.find().fetch();
     }
 
     onUnload(event) {
@@ -174,6 +183,110 @@ export class ChatPage extends Component{
         ));
     }
 
+    handleAddFriend(event){
+        event.preventDefault();
+        let friends = [];
+        let friendName = event.target.friend.value;
+        if(friendName === this.props.location.state.currentUID ){
+            event.target.friend.style.background = "#800000";
+        }else{
+            event.target.friend.style.background = "#6e7e8b";
+            if(friendName.length < 1){
+                event.target.friend.style.background = "#800000";
+            }
+            else{
+                event.target.friend.style.background = "#6e7e8b";
+                if(this.userOnline(friendName)){ // user is online
+                    event.target.friend.style.background = "#6e7e8b";
+                    if(this.validFriend(friendName)){ // friend adding is valid
+                        event.target.friend.style.background = "#6e7e8b";
+                        // Friend can now be added
+                        friends = this.getFriends(this.props.location.state.currentUID);
+                        console.log(friends);
+                        friends.push(friendName);
+                        Meteor.call("addFriend",this.allUsers()[this.getUnameIndex(this.props.location.state.currentUID)]._id , friends);
+
+                    }else{ // friend exists in your list already
+                        event.target.friend.style.background = "#800000";
+                        console.log("friend exists in your list already");
+                    }
+                }else{ // user is not online
+                    console.log("User Is not online");
+                    event.target.friend.style.background = "#800000";
+                }
+
+            }
+        }
+
+
+        event.target.friend.value = "";
+    }
+
+    // returns array of all users friends
+    getFriends(uname){
+        friends = [];
+        for(i = 0; i<this.allUsers().length; i++){
+            if(this.allUsers()[i].uname === uname){
+                console.log(this.allUsers()[i].friends);
+                friends = this.allUsers()[i].friends;
+                break;
+            }
+
+        }
+
+        return friends;
+    }
+
+    // checks to see if user is online
+    userOnline(uname){
+        let valid = false;
+        for(i = 0; i<this.onlineUsers().length; i++){
+            if(this.onlineUsers()[i].uname === uname){
+                valid = true;
+            }
+
+        }
+
+        return valid;
+
+    }
+    // checks to see if users friend is not already there
+    validFriend(friendUname){
+        let valid = true;
+
+        for(i = 0; i<this.allUsers().length; i++){
+            if(this.allUsers()[i].uname ===this.props.location.state.currentUID){
+                if(this.allUsers()[i].friends.indexOf(friendUname) > -1){
+                    valid = false;
+                }
+            }
+
+        }
+
+        return valid;
+    }
+
+    getUnameIndex(uname){
+        let index = -1;
+        for(var i = 0; i<this.allUsers().length; i++){
+            if(this.allUsers()[i].uname === uname){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    renderFriends(){
+        let friends = [];
+
+        friends = this.getFriends(this.props.location.state.currentUID);
+
+        return friends.map((allUsers) => (
+            <Friends key={allUsers._id} allUsers={allUsers} />
+        ));
+    }
+
     render(){
         return(
             <div>
@@ -192,10 +305,7 @@ export class ChatPage extends Component{
                     </Collapsible>
                     <Collapsible trigger="Friends">
                         <ul>
-                            <li><a href="#">Calvin</a></li>
-                            <li><a href="#">Cameron</a></li>
-                            <li><a href="#">Chloe</a></li>
-                            <li><a href="#">Christina</a></li>
+                            {this.renderFriends()}
                         </ul>
                     </Collapsible>
                     <Collapsible trigger="Pending Groups">
@@ -247,6 +357,11 @@ export class ChatPage extends Component{
                 </ToggleDisplay>
 
                 <div id="chatOnlineContainer">
+                    <form onSubmit={this.handleAddFriend.bind(this)}>
+                        <label id="addFriends">Add Friends:</label>
+                        <input id = "uname" type="text" name = "friend" placeholder="Enter username"/>
+                        <input id = "uname" type ="submit" value = "ADD"/>
+                    </form>
                     <Collapsible trigger="Users Online">
                         <ul id="onlineUser">
                             {this.renderOnlineUsers()}
@@ -267,12 +382,14 @@ ChatPage.propTypes = {
     messages: PropTypes.array.isRequired,
     onlineUsers: PropTypes.array.isRequired,
     allGroups: PropTypes.array.isRequired,
+    allUsers: PropTypes.array.isRequired,
 };
 
 export default createContainer(() => {
     return {
         messages: Messages.find({}).fetch(),
         onlineUsers: OnlineUsers.find({}).fetch(),
-        allGroups:  AllGroups.find().fetch()
+        allGroups:  AllGroups.find().fetch(),
+        allUsers:  AllUsers.find().fetch()
     }
 }, ChatPage);
