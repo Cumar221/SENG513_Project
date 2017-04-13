@@ -8,6 +8,7 @@ import { AllGroups } from '../imports/api/allGroups.js';
 
 Meteor.methods({
     addNewUser: function (obj) {
+
         console.log(obj);
         let uname = obj.uname;
         let email = obj.email;
@@ -57,6 +58,8 @@ Meteor.methods({
     addFriend: function(id, friendList){
         AllUsers.update({_id : id},{$set:{friends: friendList}});
     },
+
+
 
     newGroup: function(groupName, members, admins, owner){
         AllGroups.insert({

@@ -21,6 +21,7 @@
     "react-dom": "^15.5.3",
     "react-dropzone": "^3.12.3",
     "react-http-request": "^1.0.3",
+    "react-native": "^0.43.3",
     "react-router": "^4.0.0",
     "react-router-dom": "^4.0.0",
     "react-simple-dropdown": "^2.0.0",

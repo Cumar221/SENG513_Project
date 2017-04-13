@@ -196,7 +196,7 @@ export class ChatPage extends Component{
             }
             else{
                 event.target.friend.style.background = "#6e7e8b";
-                if(this.userOnline(friendName)){ // user is online
+                //if(this.userOnline(friendName)){ // user is online
                     event.target.friend.style.background = "#6e7e8b";
                     if(this.validFriend(friendName)){ // friend adding is valid
                         event.target.friend.style.background = "#6e7e8b";
@@ -210,10 +210,10 @@ export class ChatPage extends Component{
                         event.target.friend.style.background = "#800000";
                         console.log("friend exists in your list already");
                     }
-                }else{ // user is not online
+                //}else{ // user is not online
                     console.log("User Is not online");
                     event.target.friend.style.background = "#800000";
-                }
+               // }
 
             }
         }
@@ -227,7 +227,7 @@ export class ChatPage extends Component{
         friends = [];
         for(i = 0; i<this.allUsers().length; i++){
             if(this.allUsers()[i].uname === uname){
-                console.log(this.allUsers()[i].friends);
+
                 friends = this.allUsers()[i].friends;
                 break;
             }
@@ -283,7 +283,7 @@ export class ChatPage extends Component{
         friends = this.getFriends(this.props.location.state.currentUID);
 
         return friends.map((allUsers) => (
-            <Friends key={allUsers._id} allUsers={allUsers} />
+            <Friends key={allUsers._id} allUsers={allUsers} uname={this.props.location.state.currentUID} />
         ));
     }
 
