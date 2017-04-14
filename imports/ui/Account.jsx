@@ -88,7 +88,8 @@ class Account extends Component {
             if(newUname.length == 0){
                 newUname = this.props.match.params.value;
             }
-            this.props.history.push({pathname:'/chatPage',
+            console.log();
+            this.props.history.push({pathname:'/chatPage/'+newUname,
                 state:{currentUID: newUname}});
         }
 

@@ -14,23 +14,30 @@ import ToggleDisplay from 'react-toggle-display';
 import Groups from "./Groups.jsx";
 import Draw from './Draw.jsx';
 import Friends from "./Friends.jsx";
-
-let test = [{
-    client1: "test1",
-    client2: "test2",
-    client3: "test3"
-}];
-
-let flag = false;
+import {PrivateMessages} from "../api/privateMessages.js";
+import PrivateMessage from "./PrivateMessage.jsx";
+let currentUname = "";
+let control = true;
 
 export class ChatPage extends Component{
     constructor(props) {
-        super(props);
+        super(props)
+      
+        this.onUnload = this.onUnload.bind(this);
+        // string to boolean conversion
+        let bool= false;
+        if(this.props.match.params.value === "true"){
+            bool = true;
+        }
+       currentUname = this.props.match.params.uname;
+        this.state={show: bool, showCreateGroup: false, targetUser: "null" , showDraw: false};
         this.cancelDraw = this.cancelDraw.bind(this);
         this.goToDraw = this.goToDraw.bind(this);
         this.onUnload   = this.onUnload.bind(this);
-        this.state      = {show: false, showCreateGroup: false, showDraw: false};
-        console.log(this.state);
+    }
+
+    privateMessages(){
+        return PrivateMessages.find().fetch();
     }
 
     allGroups(){
@@ -113,7 +120,7 @@ export class ChatPage extends Component{
                 let valid = true;
 
                 for(i=0; i< this.allGroups().length; i++){
-                    if(this.props.location.state.currentUID === this.allGroups()[i].owner){
+                    if(currentUname === this.allGroups()[i].owner){
                         if(groupName === this.allGroups()[i].groupName){
                             valid = false;
                         }
@@ -121,7 +128,7 @@ export class ChatPage extends Component{
                 }
 
                 if(valid){
-                    Meteor.call("newGroup", groupName, emails, admins, this.props.location.state.currentUID);
+                    Meteor.call("newGroup", groupName, emails, admins, currentUname);
 
                     event.target.groupName.value = "";
                     event.target.email.value = "";
@@ -144,16 +151,23 @@ export class ChatPage extends Component{
     }
 
     handleMessageSubmit(event) {
-        console.log(this.props.location.state.currentUID);
+
         event.preventDefault();
         const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
-        Meteor.call('addMessage',{text: text, uname: this.props.location.state.currentUID});
+        if(this.state.targetUser === "null"){
+            Meteor.call('addMessage',{text: text, uname: currentUname});
+        }else{// PM
+            console.log("SENDING PM TO SERVER");
+            Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser});
+
+        }
+
         // Clear form
         ReactDOM.findDOMNode(this.refs.textInput).value = '';
     }
 
     handleOnlineUser(){
-        Meteor.call('addOnlineUser', {uname: this.props.location.state.currentUID});
+        Meteor.call('addOnlineUser', {uname: currentUname});
     }
 
     renderOnlineUsers() {
@@ -162,10 +176,19 @@ export class ChatPage extends Component{
         ));
     }
 
-    renderMessages() {
-        return this.props.messages.map((message) => (
-            <Message key={message._id} message={message} uname = {this.props.location.state.currentUID}/>
-        ));
+    renderMessages() { // NO PM
+        console.log("MESSAGES");
+        if(this.state.targetUser === "null"){
+            return this.props.messages.map((message) => (
+                <Message key={message._id} message={message} uname = {currentUname}/>
+            ));
+        }else{ // PM
+            console.log("RENDERING PM");
+            return this.props.privateMessages.map((message) => (
+                <PrivateMessage key={message._id} message={message} uname = {currentUname} targetUname={this.state.targetUser}/>
+            ));
+        }
+
     }
 
     enableCreateGroup(event){
@@ -176,7 +199,8 @@ export class ChatPage extends Component{
 
     renderGroups(){
         return this.props.allGroups.map((groupName) => (
-            <Groups key={groupName._id} groupName={groupName} uname = {this.props.location.state.currentUID} />
+
+            <Groups key={groupName._id} groupName={groupName} uname = {currentUname} />
         ));
     }
 
@@ -184,7 +208,7 @@ export class ChatPage extends Component{
         event.preventDefault();
         let friends = [];
         let friendName = event.target.friend.value;
-        if(friendName === this.props.location.state.currentUID ){
+        if(friendName === currentUname ){
             event.target.friend.style.background = "#800000";
         }else{
             event.target.friend.style.background = "#6e7e8b";
@@ -193,26 +217,32 @@ export class ChatPage extends Component{
             }
             else{
                 event.target.friend.style.background = "#6e7e8b";
-                //if(this.userOnline(friendName)){ // user is online
+                if(this.userExists(friendName)){ // user exists
                     event.target.friend.style.background = "#6e7e8b";
                     if(this.validFriend(friendName)){ // friend adding is valid
                         event.target.friend.style.background = "#6e7e8b";
+
                         // Friend can now be added
-                        friends = this.getFriends(this.props.location.state.currentUID);
-                        console.log(friends);
+                        friends = this.getFriends(currentUname);
+
                         friends.push(friendName);
-                        Meteor.call("addFriend",this.allUsers()[this.getUnameIndex(this.props.location.state.currentUID)]._id , friends);
+                        Meteor.call("addFriend",this.allUsers()[this.getUnameIndex(currentUname)]._id , friends);
+
+                        friends = this.getFriends(friendName);
+                        friends.push(currentUname);
+                        Meteor.call("addFriend",this.allUsers()[this.getUnameIndex(friendName)]._id , friends);
+
 
                     }else{ // friend exists in your list already
                         event.target.friend.style.background = "#800000";
                         console.log("friend exists in your list already");
                     }
-                //}else{ // user is not online
-                    console.log("User Is not online");
+                }else{ // user is not online
                     event.target.friend.style.background = "#800000";
-               // }
-            }
-        }
+                    console.log("friend not in db");
+                  }
+              }
+          }
         event.target.friend.value = "";
     }
 
@@ -230,10 +260,10 @@ export class ChatPage extends Component{
     }
 
     // checks to see if user is online
-    userOnline(uname){
+    userExists(uname){
         let valid = false;
-        for(i = 0; i<this.onlineUsers().length; i++){
-            if(this.onlineUsers()[i].uname === uname){
+        for(i = 0; i<this.allUsers().length; i++){
+            if(this.allUsers()[i].uname === uname){
                 valid = true;
             }
         }
@@ -244,7 +274,7 @@ export class ChatPage extends Component{
         let valid = true;
 
         for(i = 0; i<this.allUsers().length; i++){
-            if(this.allUsers()[i].uname ===this.props.location.state.currentUID){
+            if(this.allUsers()[i].uname ===currentUname){
                 if(this.allUsers()[i].friends.indexOf(friendUname) > -1){
                     valid = false;
                 }
@@ -264,14 +294,40 @@ export class ChatPage extends Component{
         return index;
     }
 
+    showPM(value){
+        this.setState({show: true, targetUser: value} );
+    }
+
+    hidePM(value){
+        this.setState({show: false, targetUser: value} );
+    }
+
     renderFriends(){
         let friends = [];
-
-        friends = this.getFriends(this.props.location.state.currentUID);
+        friends = this.getFriends(currentUname);
         return friends.map((allUsers) => (
-          <Friends key={allUsers._id} allUsers={allUsers} uname={this.props.location.state.currentUID} />
+            <Friends key={allUsers._id} allUsers={allUsers} uname={currentUname} targetUser={this.state.targetUser} showPM={this.showPM.bind(this)} hidePM={this.hidePM.bind(this)}/>
         ));
     }
+
+    button(){
+        console.log("TESTING BUTTON "+this.state.targetUser);
+        if(this.state.targetUser === "null"){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    validateTarget(){
+        friends = [];
+        friends = this.getFriends(currentUname);
+
+        if(!(friends.indexOf(this.state.targetUser) > -1)){
+            this.state.targetUser = "null";
+            this.state.show = false;
+        }
+     }
 
     goToDraw(){
         this.setState({
@@ -288,11 +344,14 @@ export class ChatPage extends Component{
     }
 
     render(){
+        this.validateTarget();
+
+        console.log("FLAG: "+ this.state.show);
         return(
             <div>
                 <div id="header">
                     <ul id="nav">
-                        <li><Link to={'/Account/'+this.props.location.state.currentUID }>Account</Link></li>
+                        <li><Link to={'/Account/'+currentUname }>Account</Link></li>
                         <li><Link to="/" onClick={this.removeOnlineUser}>Sign Out</Link></li>
                     </ul>
                 </div>
@@ -343,14 +402,14 @@ export class ChatPage extends Component{
                     <div id="chatMessagesContainer">
                         <div id="chatMessagesContent">
                             <ul id="msgCSS">
-                                <Upload uname={this.props.location.state.currentUID}/>
+                                <Upload uname={currentUname} targetUname={this.state.targetUser}/>
                                 {this.renderMessages()}
                             </ul>
                         </div>
                         <div id="chatMessagesBottom">
                             <form onSubmit={this.handleMessageSubmit.bind(this)} >
-                                <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here"/>
-                                <button id="customButton">Send</button>
+                                <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here" />
+                                <button id="customButton" >Send</button>
                             </form>
                             <span><button onClick={this.goToDraw}>Draw</button></span>
                         </div>
@@ -387,6 +446,7 @@ ChatPage.propTypes = {
     onlineUsers: PropTypes.array.isRequired,
     allGroups: PropTypes.array.isRequired,
     allUsers: PropTypes.array.isRequired,
+    privateMessages: PropTypes.array.isRequired,
 };
 
 export default createContainer(() => {
@@ -394,6 +454,7 @@ export default createContainer(() => {
         messages: Messages.find({}).fetch(),
         onlineUsers: OnlineUsers.find({}).fetch(),
         allGroups:  AllGroups.find().fetch(),
-        allUsers:  AllUsers.find().fetch()
+        allUsers:  AllUsers.find().fetch(),
+        privateMessages:  PrivateMessages.find().fetch()
     }
 }, ChatPage);
