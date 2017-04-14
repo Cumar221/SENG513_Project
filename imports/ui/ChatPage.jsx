@@ -12,6 +12,7 @@ import Upload from './Upload.jsx';
 import { Link } from "react-router-dom";
 import ToggleDisplay from 'react-toggle-display';
 import Groups from "./Groups.jsx";
+import Draw from './Draw.jsx';
 import Friends from "./Friends.jsx";
 
 let test = [{
@@ -25,11 +26,11 @@ let flag = false;
 export class ChatPage extends Component{
     constructor(props) {
         super(props);
-        this.onUnload = this.onUnload.bind(this);
-       this.state={show: false, showCreateGroup: false};
-       console.log(this.state);
-
-
+        this.cancelDraw = this.cancelDraw.bind(this);
+        this.goToDraw = this.goToDraw.bind(this);
+        this.onUnload   = this.onUnload.bind(this);
+        this.state      = {show: false, showCreateGroup: false, showDraw: false};
+        console.log(this.state);
     }
 
     allGroups(){
@@ -140,10 +141,6 @@ export class ChatPage extends Component{
             console.log("no emails given");
 
         }
-
-
-
-
     }
 
     handleMessageSubmit(event) {
@@ -214,11 +211,8 @@ export class ChatPage extends Component{
                     console.log("User Is not online");
                     event.target.friend.style.background = "#800000";
                // }
-
             }
         }
-
-
         event.target.friend.value = "";
     }
 
@@ -231,9 +225,7 @@ export class ChatPage extends Component{
                 friends = this.allUsers()[i].friends;
                 break;
             }
-
         }
-
         return friends;
     }
 
@@ -244,11 +236,8 @@ export class ChatPage extends Component{
             if(this.onlineUsers()[i].uname === uname){
                 valid = true;
             }
-
         }
-
         return valid;
-
     }
     // checks to see if users friend is not already there
     validFriend(friendUname){
@@ -260,9 +249,7 @@ export class ChatPage extends Component{
                     valid = false;
                 }
             }
-
         }
-
         return valid;
     }
 
@@ -281,10 +268,23 @@ export class ChatPage extends Component{
         let friends = [];
 
         friends = this.getFriends(this.props.location.state.currentUID);
-
         return friends.map((allUsers) => (
-            <Friends key={allUsers._id} allUsers={allUsers} uname={this.props.location.state.currentUID} />
+          <Friends key={allUsers._id} allUsers={allUsers} uname={this.props.location.state.currentUID} />
         ));
+    }
+
+    goToDraw(){
+        this.setState({
+            showDraw: true,
+            show: false
+        });
+    }
+
+    cancelDraw(){
+        this.setState({
+            showDraw: false,
+            show: true
+        });
     }
 
     render(){
@@ -352,8 +352,12 @@ export class ChatPage extends Component{
                                 <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here"/>
                                 <button id="customButton">Send</button>
                             </form>
+                            <span><button onClick={this.goToDraw}>Draw</button></span>
                         </div>
                     </div>
+                </ToggleDisplay>
+                <ToggleDisplay show={this.state.showDraw}>
+                    <Draw cancel={this.cancelDraw}/>
                 </ToggleDisplay>
 
                 <div id="chatOnlineContainer">
