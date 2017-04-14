@@ -78,7 +78,10 @@ body {
     color: black;
 }
 
+#incorrectPassword, #incorrectEmail, #incorrectUsername, #nonMatch, #noChanges, #matchesOldPass {
+  display: none;
 
+}
 
 .registrationField {
     background: #566771;
@@ -105,8 +108,3 @@ input:-moz-placeholder {
 #error{
     color: #d00013;
 }
-
-
-
-
-
