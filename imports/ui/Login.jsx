@@ -41,7 +41,7 @@ class Login extends Component {
         console.log("Authentication: "+ verify);
 
         if(verify == true) {
-            this.props.history.push({pathname:'/chatPage',
+            this.props.history.push({pathname:'/chatPage/'+uname,
                                      state:{currentUID: uname}});
         }
     }

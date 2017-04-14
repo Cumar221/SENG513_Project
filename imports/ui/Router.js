@@ -22,9 +22,9 @@ Meteor.startup(() => {
             <div>
                 <Route exact={true} path="/" component={Login} />
                 <Route path="/register" component={Register}  onEnter={requireAuth}/>
-                <Route path="/chatPage" component={ChatPage} />
                 <Route path="/forgotPass" component={ForgotPass} />
                 <Route name="Account" path="/Account/:value" component={Account} />
+                <Route name="ChatPage" path="/chatPage/:uname" component={ChatPage} />
             </div>
         </Router>,
         document.getElementById('render-target')
