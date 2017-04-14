@@ -31,13 +31,14 @@ body {
 .userField{
     background: #566771;
     float: left;
-    text-align: right;
+    text-align: left;
     padding-left: 20%;
 
 }
 .logInButton{
     padding-top: 15%;
     text-align: center;
+
 
 }
 
@@ -80,7 +81,20 @@ body {
 
 #incorrectPassword, #incorrectEmail, #incorrectUsername, #nonMatch, #noChanges, #matchesOldPass {
   display: none;
+  color: #800000;
 
+
+}
+#invalidLogin {
+  display: none;
+  color: #800000;
+  padding-bottom: 5px;
+}
+ #emptyUsrname, #emptyPass, #emptyEm, #emptyPass1, #emptyPass2 {
+  display: none;
+  color: #800000;
+  float: right;
+  padding-left: 5px;
 }
 
 .registrationField {

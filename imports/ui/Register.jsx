@@ -41,6 +41,11 @@ class Register extends Component {
         let email = event.target.email.value;
         let pass1 = event.target.pass1.value;
         let pass2 = event.target.pass2.value;
+        this.resetColors(event);
+        this.resetEmptyErrors(event);
+        this.takenEmail(false);
+        this.takenUsername(false);
+        this.notMatching(false);
         if(username.length > 0 && email.length > 0 && pass1.length > 0 && pass2.length > 0){
 
             if(pass1 === pass2){
@@ -51,19 +56,114 @@ class Register extends Component {
                         this.props.history.push('/');
                     }else{
                         console.log("email Already Taken");
+                        this.takenEmail(true);
                     }
 
                 }else{
                     console.log("Username Already Taken");
+                    this.takenUsername(true);
                 }
 
-            }else{
+            }
+
+            else{
 
                 console.log("Passwords dont match");
+                this.notMatching(true);
             }
-        }else{
-
         }
+
+          else{
+            if (username.length === 0) {
+              event.target.username.style.background = "#800000";
+              this.emptyUsername();
+            }
+
+            if (email.length === 0) {
+              event.target.email.style.background = "#800000";
+              this.emptyEmail();
+            }
+
+            if (pass1.length === 0) {
+              event.target.pass1.style.background = "#800000";
+              this.emptyPass1();
+            }
+
+            if (pass2.length === 0) {
+              event.target.pass2.style.background = "#800000";
+              this.emptyPass2();
+            }
+        }
+    }
+
+    resetColors(event){
+        event.target.username.style.background = "#6e7e8b";
+        event.target.email.style.background = "#6e7e8b";
+        event.target.pass1.style.background = "#6e7e8b";
+        event.target.pass2.style.background = "#6e7e8b";
+    }
+
+    resetEmptyErrors(event) {
+      document.getElementById('emptyUsrname').style.display = 'none';
+      document.getElementById('emptyEm').style.display = 'none';
+      document.getElementById('emptyPass1').style.display = 'none';
+      document.getElementById('emptyPass2').style.display = 'none';
+
+    }
+
+    emptyUsername() {
+      document.getElementById('emptyUsrname').style.display = 'inline';
+    }
+
+    emptyEmail() {
+      document.getElementById('emptyEm').style.display = 'inline';
+
+    }
+
+    emptyPass1() {
+      document.getElementById('emptyPass1').style.display = 'inline';
+
+    }
+
+    emptyPass2() {
+      document.getElementById('emptyPass2').style.display = 'inline';
+
+    }
+
+    takenUsername(exists) {
+
+      if (exists) {
+        //document.getElementById('takenUsrname').style.display = 'inline';
+
+      }
+
+      else {
+        //document.getElementById('takenUsrname').style.display = 'none';
+      }
+
+    }
+
+    takenEmail(exists) {
+
+      if (exists) {
+        //document.getElementById('takenEm').style.display = 'inline';
+
+      }
+
+      else {
+      //  document.getElementById('takenEm').style.display = 'none';
+      }
+    }
+
+    notMatching(passwordsNotMatching) {
+
+      if (passwordsNotMatching) {
+        document.getElementById('nonMatch').style.display = 'inline';
+      }
+
+      else {
+        document.getElementById('nonMatch').style.display = 'none';
+      }
     }
 
     render() {
@@ -74,16 +174,31 @@ class Register extends Component {
                         <div className="registrationField">
                             <div className="UItem1">
                                 Username: <input id="uname" name="username" type="text" placeholder="example"/>
+                                <div id="emptyUsrname">
+                                  <p>Enter a username</p>
+                                </div>
                             </div>
                             <div className="UItem2">
                                 Email: <input id="uname" name="email" type="text" placeholder="example@example.com"/>
+                              <div id="emptyEm">
+                                  <p>Enter an email</p>
+                                </div>
                             </div>
                             <div className="UItem3">
                                 Password: <input id="uname" name="pass1" type="password" placeholder="*************"/>
+                              <div id="emptyPass1">
+                                  <p>Enter a password</p>
+                                </div>
                             </div>
                             <div className="UItem4">
                                 Re-enter password: <input id="uname" name="pass2" type="password" placeholder="*************"/>
+                              <div id="emptyPass2">
+                                  <p>Re-enter your password</p>
+                                </div>
                             </div>
+                            <div id="nonMatch">
+                                <p>The passwords do not match</p>
+                              </div>
                             <div className="register">
                                 <br></br> <input type="submit" value="Register" id="register"/>
 
