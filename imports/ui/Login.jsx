@@ -35,7 +35,7 @@ class Login extends Component {
 
         }
         else{
-            console.log("Password or Useername Empty");
+            console.log("Password or Username Empty");
         }
 
         console.log("Authentication: "+ verify);
