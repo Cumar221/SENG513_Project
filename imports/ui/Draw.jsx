@@ -36,7 +36,6 @@ export default class Draw extends Component{
 
     clear(event){
         event.preventDefault();
-        console.log("hello");
         this._sketch.clear();
     }
 
@@ -52,12 +51,10 @@ export default class Draw extends Component{
 
     send(event) {
         event.preventDefault();
-
     }
 
     cancel(event) {
         event.preventDefault();
-        console.log("cancel");
         this.props.cancel();
     }
 

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import ToggleDisplay from 'react-toggle-display';
 import Groups from "./Groups.jsx";
 import Draw from './Draw.jsx';
+import TextEditor from './TextEditor.jsx';
 import Friends from "./Friends.jsx";
 import {PrivateMessages} from "../api/privateMessages.js";
 import PrivateMessage from "./PrivateMessage.jsx";
@@ -30,10 +31,12 @@ export class ChatPage extends Component{
             bool = true;
         }
        currentUname = this.props.match.params.uname;
-        this.state={show: bool, showCreateGroup: false, targetUser: "null" , showDraw: false};
-        this.cancelDraw = this.cancelDraw.bind(this);
-        this.goToDraw = this.goToDraw.bind(this);
-        this.onUnload   = this.onUnload.bind(this);
+        this.state={show: bool, showCreateGroup: false, targetUser: "null" , showDraw: false, showTextEditor: false};
+        this.cancelDraw       = this.cancelDraw.bind(this);
+        this.cancelTextEditor = this.cancelTextEditor.bind(this);
+        this.goToDraw         = this.goToDraw.bind(this);
+        this.goToTextEditor   = this.goToTextEditor.bind(this);
+        this.onUnload         = this.onUnload.bind(this);
     }
 
     privateMessages(){
@@ -336,9 +339,23 @@ export class ChatPage extends Component{
         });
     }
 
+    goToTextEditor(){
+        this.setState({
+            showTextEditor: true,
+            show: false
+        });
+    }
+
     cancelDraw(){
         this.setState({
             showDraw: false,
+            show: true
+        });
+    }
+
+    cancelTextEditor(){
+        this.setState({
+            showTextEditor: false,
             show: true
         });
     }
@@ -411,12 +428,18 @@ export class ChatPage extends Component{
                                 <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here" />
                                 <button id="customButton" >Send</button>
                             </form>
-                            <span><button onClick={this.goToDraw}>Draw</button></span>
+                            <span>
+                                <button onClick={this.goToDraw}>Draw</button>
+                                <button onClick={this.goToTextEditor}>TextEditor</button>
+                            </span>
                         </div>
                     </div>
                 </ToggleDisplay>
                 <ToggleDisplay show={this.state.showDraw}>
                     <Draw cancel={this.cancelDraw}/>
+                </ToggleDisplay>
+                <ToggleDisplay show={this.state.showTextEditor}>
+                    <TextEditor cancel={this.cancelTextEditor}/>
                 </ToggleDisplay>
 
                 <div id="chatOnlineContainer">
