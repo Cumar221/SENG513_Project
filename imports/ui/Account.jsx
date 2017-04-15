@@ -91,7 +91,7 @@ class Account extends Component {
                     }
                 }
 
-                if(newPass1.length > 0 && newPass2.length > 0){
+                if(newPass1.length > 0 || newPass2.length > 0){
 
                   this.noChangesMessage(false);
 

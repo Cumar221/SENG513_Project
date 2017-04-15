@@ -133,12 +133,12 @@ class Register extends Component {
     takenUsername(exists) {
 
       if (exists) {
-        //document.getElementById('takenUsrname').style.display = 'inline';
+        document.getElementById('takenUsrname').style.display = 'inline';
 
       }
 
       else {
-        //document.getElementById('takenUsrname').style.display = 'none';
+        document.getElementById('takenUsrname').style.display = 'none';
       }
 
     }
@@ -146,12 +146,12 @@ class Register extends Component {
     takenEmail(exists) {
 
       if (exists) {
-        //document.getElementById('takenEm').style.display = 'inline';
+        document.getElementById('takenEm').style.display = 'inline';
 
       }
 
       else {
-      //  document.getElementById('takenEm').style.display = 'none';
+        document.getElementById('takenEm').style.display = 'none';
       }
     }
 
@@ -177,11 +177,17 @@ class Register extends Component {
                                 <div id="emptyUsrname">
                                   <p>Enter a username</p>
                                 </div>
+                                <div id="takenUsrname">
+                                  <p>Username is already taken</p>
+                                </div>
                             </div>
                             <div className="UItem2">
                                 Email: <input id="uname" name="email" type="text" placeholder="example@example.com"/>
                               <div id="emptyEm">
                                   <p>Enter an email</p>
+                                </div>
+                                <div id="takenEm">
+                                  <p>Email is already used</p>
                                 </div>
                             </div>
                             <div className="UItem3">

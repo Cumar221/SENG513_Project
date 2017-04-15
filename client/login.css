@@ -90,7 +90,7 @@ body {
   color: #800000;
   padding-bottom: 5px;
 }
- #emptyUsrname, #emptyPass, #emptyEm, #emptyPass1, #emptyPass2 {
+ #emptyUsrname, #emptyPass, #emptyEm, #emptyPass1, #emptyPass2, #takenUsrname, #takenEm {
   display: none;
   color: #800000;
   float: right;
