@@ -136,6 +136,16 @@ export class ChatPage extends Component{
 
                 if(valid){
 
+                    let temp = [];
+
+                    for(i = 0; i<emails.length; i++){
+                        if(emails[i] !== currentUname){
+                            temp.push(emails[i]);
+                        }
+                    }
+
+                    emails = temp; //
+
                     Meteor.call("newGroup", groupName, emails, admins, currentUname);
 
                     event.target.groupName.value = "";
@@ -593,8 +603,15 @@ export class ChatPage extends Component{
             newMembers = temp;
             let oldInvited = this.getGroupInvited(this.state.targetGroupID);
             temp = oldInvited.concat(newMembers);
+            let temp2 = [];
+            for(i = 0; i<temp.length; i++){
 
-            Meteor.call("updateGroupInvited", this.state.targetGroupID, temp);
+                if(temp[i] !== currentUname){
+                    temp2.push(temp[i]);
+                }
+            }//
+
+            Meteor.call("updateGroupInvited", this.state.targetGroupID, temp2);
         }
         if(newAdmins.length > 0){
             temp = newAdmins.split(",");
