@@ -516,6 +516,15 @@ export class ChatPage extends Component{
         }
     }
 
+    goToDraw(){
+        this.setState({
+            showDraw: true,
+            show: false,
+            showCreateGroup: false,
+            showTextEditor: false
+        });
+    }
+
     goToTextEditor(){
         this.setState({
             showTextEditor: true,

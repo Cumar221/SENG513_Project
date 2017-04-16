@@ -91,7 +91,7 @@ export default class Draw extends Component{
         xhr.open('POST', URL, false);
         xhr.send(data);
         const fileResponse = JSON.parse(xhr.responseText);
-        
+
         if(this.props.targetGroupID != null && this.props.targetUname == null){ // group chat
             Meteor.call('addGroupMessage',{file: fileResponse.secure_url, uname: this.props.uname, targetUname: this.props.targetUname,  targetGroupID: this.props.targetGroupID});
         }
