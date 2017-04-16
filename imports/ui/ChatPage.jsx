@@ -695,6 +695,10 @@ export class ChatPage extends Component{
                                 <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here" />
                                 <button id="customButton" >Send</button>
                             </form>
+                            <span>
+                                <button onClick={this.goToDraw}>Draw</button>
+                                <button onClick={this.goToTextEditor}>TextEditor</button>
+                            </span>
                         </div>
                     </div>
                 </ToggleDisplay>
