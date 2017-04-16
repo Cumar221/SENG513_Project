@@ -220,6 +220,20 @@ export class ChatPage extends Component{
         ));
     }
 
+    memberExists(uname){
+        let users = [];
+        users = this.getGroupMembers(this.state.targetGroupID);
+        flag = false;
+
+        for(i = 0; i<users.length; i++){
+            if(uname === users[i]){
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
     renderGroupUsers(){
         users = [];
         users = this.getGroupMembers(this.state.targetGroupID);
@@ -578,10 +592,10 @@ export class ChatPage extends Component{
             let temp2 = [];
             for(i = 0; i<temp.length; i++){
 
-                if(temp[i] !== currentUname){
+                if(!this.memberExists(temp[i])){ //
                     temp2.push(temp[i]);
                 }
-            }//
+            }///
 
             Meteor.call("updateGroupInvited", this.state.targetGroupID, temp2);
         }
@@ -598,6 +612,7 @@ export class ChatPage extends Component{
         event.target.admin.value = "";
         this.hideEditGroup(this.state.targetGroupID);
     }
+
 
     render(){
         this.validateTarget();
