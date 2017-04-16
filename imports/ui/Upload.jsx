@@ -6,6 +6,13 @@ const URL =  "https://api.cloudinary.com/v1_1/df9evoecg/image/upload";
 const UPLOADPRESET = 'xeckeflq';
 const APIKEY = '299182963357756';
 
+const dropZoneStyle = {
+    position: 'absolute',
+    height: '91%',
+    width: '80%',
+    zIndex: 0,
+};
+
 export default class UploadImages extends Component{
     constructor(props) {
         super(props);
@@ -35,6 +42,7 @@ export default class UploadImages extends Component{
                 <div className="ImageAttach">
                     <Dropzone
                         multiple={false}
+                        style={dropZoneStyle}
                         onDrop={this.upload.bind(this)}>
                         <div>Try dropping some files here, or click to select files to upload.</div>
                     </Dropzone>
