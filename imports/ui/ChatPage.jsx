@@ -228,7 +228,7 @@ export class ChatPage extends Component{
     enableCreateGroup(event){
         event.preventDefault();
 
-        this.setState({showCreateGroup: true});
+        this.setState({showCreateGroup: true, show: false});
     }
 
     renderGroups(){
@@ -361,11 +361,11 @@ export class ChatPage extends Component{
     }
 
     showPM(value){
-        this.setState({show: true, targetUser: value, targetGroupID: null} );
+        this.setState({show: true, targetUser: value, targetGroupID: null, showCreateGroup: false} );
     }
 
     showGroupChat(groupID){
-        this.setState({show:true, targetUser: null, targetGroupID: groupID});
+        this.setState({show:true, targetUser: null, targetGroupID: groupID, showCreateGroup: false});
     }
 
     hideGroupChat(username){
@@ -404,28 +404,37 @@ export class ChatPage extends Component{
         friends = [];
         friends = this.getFriends(currentUname);
 
-
-
+        console.log("VALID: "+ this.state.showCreateGroup);
+        let val = this.state.showCreateGroup;
         if(this.state.targetGroupID == null && this.state.targetUser != null){ // PM only
             this.state.show = true;
+            this.state.showCreateGroup= false;
             if(!(friends.indexOf(this.state.targetUser) > -1)){
                 this.state.targetUser = null;
                 this.state.show = false;
 
             }
-        }else if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat only
+        }else if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat  only
             this.state.show = true;
+            this.state.showCreateGroup= false;
             if(!this.groupExists(this.state.targetGroupID)){
                 this.state.show = false;
                 this.state.targetGroupID = null;
             }
-        }else if(this.state.targetGroupID == null && this.state.targetUser == null){ // no PM or Group Chat
+        }else if(this.state.targetGroupID == null && this.state.targetUser == null){ // no     PM or Group Chat
 
         this.state.show = false;
         }
 
+        if(val){
+            this.state.show = false;
+            this.state.showCreateGroup = true;
+        }
+
+
+
         /*
-        if(this.state.targetGroupID == null){
+        if(this.state.targetGroupID ==  null){
             if(this.state.targetUser == false){
                 console.log("1");
                 this.state.show = true;
