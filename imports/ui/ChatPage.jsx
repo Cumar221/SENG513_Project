@@ -27,7 +27,7 @@ export class ChatPage extends Component{
         if(this.props.match.params.value === "true"){
             bool = true;
         }
-       currentUname = this.props.match.params.uname;
+        currentUname = this.props.match.params.uname;
         this.state={show: bool, showCreateGroup: false, targetUser: "null"};
     }
 
@@ -48,11 +48,12 @@ export class ChatPage extends Component{
     }
 
     onUnload(event) {
-        {this.removeOnlineUser();}
+        //this.removeOnlineUser(currentUname);
         this.state.showCreateGroup = false;
     }
 
     componentDidMount() {
+        currentUname = this.props.match.params.uname;
         {this.handleOnlineUser();}
         window.addEventListener("beforeunload", this.onUnload)
     }
@@ -61,13 +62,20 @@ export class ChatPage extends Component{
         window.removeEventListener("beforeunload", this.onUnload)
     }
 
-    removeOnlineUser(event) {
-        let {currentUID} = this.props.location.state;
-        let id = OnlineUsers.findOne({uname: currentUID});
+    removeOnlineUser(uname) {
+        let currentUID = currentUname;
+        console.log(currentUID);
+        let index = -1;
+        for(i = 0; i<this.onlineUsers().length; i++){
+            if(this.onlineUsers()[i].uname === currentUID){
+                index = i;
+                break;
+            }
+        }
+        let id = this.onlineUsers()[index]._id;
 
-        console.log("delete");
         if(id != undefined){
-            OnlineUsers.remove(id._id);
+            Meteor.call("removeUname",id);
         }
     }
 
@@ -154,11 +162,15 @@ export class ChatPage extends Component{
         event.preventDefault();
         const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
         if(this.state.targetUser === "null"){
-            Meteor.call('addMessage',{text: text, uname: currentUname});
+			if(text.length > 0){
+				Meteor.call('addMessage',{text: text, uname: currentUname});
+			}
         }else{// PM
-            console.log("SENDING PM TO SERVER");
-            Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser});
-
+			if(text.length > 0){
+				console.log("SENDING PM TO SERVER");
+				Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser});
+			}
+		this.scrollToBottom();	
         }
 
         // Clear form
@@ -341,17 +353,24 @@ export class ChatPage extends Component{
         }
 
     }
+	
+	scrollToBottom(){
+		setTimeout(function(){
+			var elem = document.getElementById('chatMessagesContent');
+			elem.scrollTop = elem.scrollHeight ;
+		}.bind(this), 100);
+	}
 
     render(){
         this.validateTarget();
-
+        currentUname = this.props.match.params.uname;
         console.log("FLAG: "+ this.state.show);
         return(
             <div>
                 <div id="header">
                     <ul id="nav">
-                        <li><Link to={'/Account/'+currentUname }>Account</Link></li>
-                        <li><Link to="/" onClick={this.removeOnlineUser}>Sign Out</Link></li>
+                        <li><Link onClick={this.removeOnlineUser.bind(this)} to={'/Account/'+currentUname }>Account</Link></li>
+                        <li><Link to="/" onClick={this.removeOnlineUser.bind(this)}>Sign Out</Link></li>
                     </ul>
                 </div>
                 <div id="chatChannelContainer">
@@ -403,6 +422,7 @@ export class ChatPage extends Component{
                             <ul id="msgCSS">
                                 <Upload uname={currentUname} targetUname={this.state.targetUser}/>
                                 {this.renderMessages()}
+								{this.scrollToBottom()}
                             </ul>
                         </div>
                         <div id="chatMessagesBottom">

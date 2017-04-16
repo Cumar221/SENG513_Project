@@ -13,10 +13,12 @@ Meteor.methods({
         let uname = obj.uname;
         let email = obj.email;
         let pass = obj.pass;
+		let secret = obj.secret;
         AllUsers.insert({
             uname,
             email,
             pass,
+			secret,
             friends: [],
         });
     },
@@ -64,12 +66,20 @@ Meteor.methods({
         AllUsers.update({_id : id},{$set:{uname: uname}});
     },
 
+    removeUname: function(id){
+        OnlineUsers.remove({_id: id})
+    },
+
     updateEmail: function(id, email){
         AllUsers.update({_id : id},{$set:{email: email}});
     },
 
     updatePassword: function(id, pass){
         AllUsers.update({_id : id},{$set:{pass: pass}});
+    },
+	
+	updateSecret: function(id, secret){
+        AllUsers.update({_id : id},{$set:{secret: secret}});
     },
 
     addFriend: function(id, friendList){
