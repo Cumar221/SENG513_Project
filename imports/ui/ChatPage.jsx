@@ -15,7 +15,9 @@ import Groups from "./Groups.jsx";
 import Friends from "./Friends.jsx";
 import {PrivateMessages} from "../api/privateMessages.js";
 import PrivateMessage from "./PrivateMessage.jsx";
+import PendingGroups from "./PendingGroups.jsx";
 import GroupMessage from "./GroupMessage.jsx";
+import GroupUsers from "./GroupUsers.jsx";
 import {GroupMessages} from "../api/groupMessages.js";
 let currentUname = "";
 let control = true;
@@ -30,7 +32,7 @@ export class ChatPage extends Component{
             bool = true;
         }
         currentUname = this.props.match.params.uname;
-        this.state={show: bool, showCreateGroup: false, targetUser: null, targetGroupID: null};
+        this.state={show: bool, showCreateGroup: false, showEditGroup: false, showGroupMembers: false,   targetUser: null, targetGroupID: null, changeGroup: null};
     }
 
     privateMessages(){
@@ -62,6 +64,14 @@ export class ChatPage extends Component{
 
     componentWillUnmount() {
         window.removeEventListener("beforeunload", this.onUnload)
+    }
+
+    showEditGroup(id){
+        this.setState({showEditGroup: true, changeGroup : id, show: false})
+    }
+
+    hideEditGroup(id){
+        this.setState({showEditGroup: false, changeGroup : null, targetGroupID: id, show: true}) ////
     }
 
     removeOnlineUser(uname) {
@@ -125,7 +135,7 @@ export class ChatPage extends Component{
                 }
 
                 if(valid){
-                    console.log(emails);
+
                     Meteor.call("newGroup", groupName, emails, admins, currentUname);
 
                     event.target.groupName.value = "";
@@ -202,6 +212,46 @@ export class ChatPage extends Component{
         ));
     }
 
+    renderGroupUsers(){
+        users = [];
+        users = this.getGroupMembers(this.state.targetGroupID);
+        return users.map((onlineUser) => (
+            <GroupUsers key={onlineUser._id} onlineUser={onlineUser} />
+        ));
+    }
+
+    getGroupMembers(id){
+        let members = [];
+        for(i = 0;i<this.allGroups().length; i++){
+            if(this.allGroups()[i]._id === id){
+                members = this.allGroups()[i].members;
+                break;
+            }
+        }
+        return members;
+    }
+    getGroupInvited(id){
+        let members = [];
+        for(i = 0;i<this.allGroups().length; i++){
+            if(this.allGroups()[i]._id === id){
+                members = this.allGroups()[i].invited;
+                break;
+            }
+        }
+        return members;
+    }
+
+    getGroupAdmins(id){
+        let members = [];
+        for(i = 0;i<this.allGroups().length; i++){
+            if(this.allGroups()[i]._id === id){
+                members = this.allGroups()[i].admins;
+                break;
+            }
+        }
+        return members;
+    }
+
     renderMessages() { // NO PM
 
 
@@ -228,14 +278,14 @@ export class ChatPage extends Component{
     enableCreateGroup(event){
         event.preventDefault();
 
-        this.setState({showCreateGroup: true, show: false});
+        this.setState({showCreateGroup: true, show: false, showEditGroup : false});
     }
 
     renderGroups(){
         let groupUname = [];
         return this.props.allGroups.map((groupName) => (
 
-            <Groups key={groupName._id} groupName={groupName} uname = {currentUname} showGroupChat={this.showGroupChat.bind(this)} hideGroupChat = {this.hideGroupChat.bind(this)}  />
+            <Groups key={groupName._id} groupName={groupName} uname = {currentUname} showGroupChat={this.showGroupChat.bind(this)} hideGroupChat = {this.hideGroupChat.bind(this)} hideEditGroup={this.hideEditGroup.bind(this)}  showEditGroup={this.showEditGroup.bind(this)} />
         ));
     }
 
@@ -407,26 +457,48 @@ export class ChatPage extends Component{
         console.log("VALID: "+ this.state.showCreateGroup);
         let val = this.state.showCreateGroup;
         if(this.state.targetGroupID == null && this.state.targetUser != null){ // PM only
+
             this.state.show = true;
+            this.state.showGroupMembers = false;
             this.state.showCreateGroup= false;
+            this.state.showEditGroup = false;
             if(!(friends.indexOf(this.state.targetUser) > -1)){
                 this.state.targetUser = null;
                 this.state.show = false;
 
             }
-        }else if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat  only
+        }else if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat   only
+            if(!this.state.show){
+                this.state.showEditGroup = true;
+            }else{
+                this.state.showEditGroup = false;
+            }
+            if(this.state.showCreateGroup){ //
+                this.state.showEditGroup = false;
+            }
             this.state.show = true;
+            this.state.showGroupMembers = true;
             this.state.showCreateGroup= false;
             if(!this.groupExists(this.state.targetGroupID)){
                 this.state.show = false;
+                this.state.showGroupMembers = false;
                 this.state.targetGroupID = null;
+                this.state.showEditGroup = false;
             }
-        }else if(this.state.targetGroupID == null && this.state.targetUser == null){ // no     PM or Group Chat
+            if(this.state.showEditGroup){
+                this.state.show=false;
+                this.state.showGroupMembers = true;
+                this.state.changeGroup = this.state.targetGroupID;
+            }
 
+        }else if(this.state.targetGroupID == null && this.state.targetUser == null){ // no     PM or Group Chat
+        this.state.showGroupMembers = false;
         this.state.show = false;
+        this.state.showEditGroup = false;
         }
 
         if(val){
+            this.state.showGroupMembers = false;
             this.state.show = false;
             this.state.showCreateGroup = true;
         }
@@ -488,6 +560,12 @@ export class ChatPage extends Component{
 
 
     }
+
+    renderPendingGroups(){
+        return this.props.allGroups.map((groupName) => (
+            <PendingGroups key={groupName._id} groupName={groupName} uname = {currentUname}/>
+        ));
+    }
 	
 	scrollToBottom(){
 		setTimeout(function(){
@@ -495,6 +573,52 @@ export class ChatPage extends Component{
 			elem.scrollTop = elem.scrollHeight ;
 		}.bind(this), 100);
 	}
+
+	handleGroupChange(event){ //
+        event.preventDefault();
+        let newname = event.target.groupName.value;
+        let newMembers = event.target.email.value;
+        let newAdmins = event.target.admin.value;
+        let temp = [];
+        if(newname.length > 0){
+            // update new group name
+            Meteor.call("updateGroupName", this.state.targetGroupID, newname);
+        }
+
+        if(newMembers.length > 0){
+
+            newMembers = newMembers.replace(/ /g,'');
+            newAdmins = newAdmins.replace(/ /g,'');
+            temp = newMembers.split(",");
+            newMembers = temp;
+            let oldInvited = this.getGroupInvited(this.state.targetGroupID);
+            temp = oldInvited.concat(newMembers);
+
+            Meteor.call("updateGroupInvited", this.state.targetGroupID, temp);
+        }
+        if(newAdmins.length > 0){
+            temp = newAdmins.split(",");
+            newAdmins = temp;
+            let oldAdmins = this.getGroupAdmins(this.state.targetGroupID);
+            temp = oldAdmins.concat(newAdmins);
+            console.log("Admin List: "+ temp);
+            Meteor.call("updateGroupAdmins", this.state.targetGroupID, temp);
+        }
+        event.target.groupName.value = "";
+        event.target.email.value = "";
+        event.target.admin.value = "";
+        this.hideEditGroup(this.state.targetGroupID);
+
+
+
+
+
+
+
+
+
+
+    }
 
     render(){
 
@@ -523,10 +647,7 @@ export class ChatPage extends Component{
                     </Collapsible>
                     <Collapsible trigger="Pending Groups">
                         <ul>
-                            <li><a href="#">Calvin</a></li>
-                            <li><a href="#">Cameron</a></li>
-                            <li><a href="#">Chloe</a></li>
-                            <li><a href="#">Christina</a></li>
+                            {this.renderPendingGroups()}
                         </ul>
                     </Collapsible>
                 </div>
@@ -536,7 +657,7 @@ export class ChatPage extends Component{
                             <form onSubmit={this.handleSubmit.bind(this)}>
                                 <div className="registrationField">
                                     <div className="UItem1">
-                                        Group Name: <input id="uname" name="groupName" type="text" placeholder="example"/>
+                                        Group Name: <input id="uname" name="groupName" type="text" placeholder="example "/>
                                     </div>
                                     <div className="UItem2">
                                         Invite Members: <input id="uname" name="email" type="text" placeholder="example, example2"/>
@@ -545,6 +666,28 @@ export class ChatPage extends Component{
                                         Admin(s): <input id="uname" name="admin" type="text" placeholder="example, example2"/>
                                     </div>
                                     <div className="register">
+                                        <br></br> <input type="submit" value="Create Group" id="register"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </ToggleDisplay>
+                <ToggleDisplay show={this.state.showEditGroup}>
+                    <div className="Main">
+                        <div className="fieldContainer">
+                            <form onSubmit={this.handleGroupChange.bind(this)}>
+                                <div className="registrationField">
+                                    <div className="UItem1">
+                                        New Group Name: <input id="uname" name="groupName" type="text" placeholder="example "/>
+                                    </div>
+                                    <div className="UItem2">
+                                        Invite Members: <input id="uname" name="email" type="text" placeholder="example, example2"/>
+                                    </div>
+                                    <div className="UItem2">
+                                        Add Admin(s): <input id="uname" name="admin" type="text" placeholder="example, example2"/>
+                                    </div>
+                                    <div className="Save Changes">
                                         <br></br> <input type="submit" value="Create Group" id="register"/>
                                     </div>
                                 </div>
@@ -581,6 +724,14 @@ export class ChatPage extends Component{
                             {this.renderOnlineUsers()}
                         </ul>
                     </Collapsible>
+                    <ToggleDisplay show={this.state.showGroupMembers}>
+                        <Collapsible trigger="Group Users">
+                            <ul id="onlineUser">
+                                {this.renderGroupUsers()}
+                            </ul>
+                        </Collapsible>
+                    </ToggleDisplay>
+
                 </div>
                 <footer>
                     <div id="footer">

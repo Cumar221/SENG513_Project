@@ -45,10 +45,29 @@ export default class Groups extends Component {
         return null;
     }
 
+    checkHidden(){
+        let flag = false;
+        if(this.props.groupName.owner === this.props.uname){
+            flag = true;
+        }
+        else if(this.props.groupName.admins.indexOf(this.props.uname) > -1){
+            flag = true;
+        }else{
+            flag = false;
+        }
+        console.log(flag+"   owner: "+ this.props.groupName.owner+ "   uname: "+ this.props.uname);
+        return flag;
+    }
+//
+    handleOption(event){
+        event.preventDefault();
+        this.props.showEditGroup(this.props.groupName._id);
+    }
+
     render() {
         if(this.props.groupName.members.indexOf(this.props.uname) > -1 || this.props.groupName.owner === this.props.uname){
             return (
-                <li><a href="" onClick={this.handleClick.bind(this)}> {this.props.groupName.groupName} </a> <img src="/images/X.png" onClick={this.handleClose.bind(this)}/></li>
+                <li><a href="" onClick={this.handleClick.bind(this)}> {this.props.groupName.groupName} </a> <img className="gearBox"  src="/images/gear.png" hidden={!this.checkHidden()} onClick={this.handleOption.bind(this)}/> <img  src="/images/X.png" onClick={this.handleClose.bind(this)}/></li>
             );
         }else{
             return null;
