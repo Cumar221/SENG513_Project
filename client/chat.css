@@ -264,3 +264,8 @@ ul#nav {
     color: white;
     padding-right: 15px;
 }
+
+.gearBox{
+    padding-left: 5px;
+    padding-right: 5px;
+}

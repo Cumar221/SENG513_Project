@@ -12,12 +12,12 @@ import Upload from './Upload.jsx';
 import { Link } from "react-router-dom";
 import ToggleDisplay from 'react-toggle-display';
 import Groups from "./Groups.jsx";
-import Draw from './Draw.jsx';
-import TextEditor from './TextEditor.jsx';
 import Friends from "./Friends.jsx";
 import {PrivateMessages} from "../api/privateMessages.js";
 import PrivateMessage from "./PrivateMessage.jsx";
+import PendingGroups from "./PendingGroups.jsx";
 import GroupMessage from "./GroupMessage.jsx";
+import GroupUsers from "./GroupUsers.jsx";
 import {GroupMessages} from "../api/groupMessages.js";
 let currentUname = "";
 let control = true;
@@ -33,7 +33,7 @@ export class ChatPage extends Component{
         }
       
         currentUname = this.props.match.params.uname;
-        this.state={show: bool, showCreateGroup: false, targetUser: "null" ,  targetGroupID: null, showDraw: false, showTextEditor: false};
+        this.state={show: bool, showCreateGroup: false, targetUser: "null" ,  showEditGroup: false, showGroupMembers: false, targetGroupID: null, showDraw: false, changeGroup: null , showTextEditor: false};
         this.cancelDraw       = this.cancelDraw.bind(this);
         this.cancelTextEditor = this.cancelTextEditor.bind(this);
         this.goToDraw         = this.goToDraw.bind(this);
@@ -70,6 +70,14 @@ export class ChatPage extends Component{
 
     componentWillUnmount() {
         window.removeEventListener("beforeunload", this.onUnload)
+    }
+
+    showEditGroup(id){
+        this.setState({showEditGroup: true, changeGroup : id, show: false})
+    }
+
+    hideEditGroup(id){
+        this.setState({showEditGroup: false, changeGroup : null, targetGroupID: id, show: true}) ////
     }
 
     removeOnlineUser(uname) {
@@ -114,6 +122,11 @@ export class ChatPage extends Component{
                 emails = emails.replace(/ /g,'');
                 temp = emails.split(",");
                 emails = temp;
+
+
+
+
+
                 temp = admins.split(",");
                 admins = temp;
 
@@ -128,7 +141,17 @@ export class ChatPage extends Component{
                 }
 
                 if(valid){
-                    console.log(emails);
+
+                    let temp = [];
+
+                    for(i = 0; i<emails.length; i++){
+                        if(emails[i] !== currentUname){
+                            temp.push(emails[i]);
+                        }
+                    }
+
+                    emails = temp; //
+
                     Meteor.call("newGroup", groupName, emails, admins, currentUname);
 
                     event.target.groupName.value = "";
@@ -143,10 +166,16 @@ export class ChatPage extends Component{
                 event.target.groupName.style.background = "#800000";
             }
 
+
         }else{
             event.target.email.style.background = "#800000";
             console.log("no emails given");
+
         }
+
+
+
+
     }
 
     handleMessageSubmit(event) {
@@ -163,7 +192,7 @@ export class ChatPage extends Component{
             if(text.length > 0){
                 Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser});
             }
-            this.scrollToBottom();
+            this.scrollToBottom();	
         }
         // Clear form
         ReactDOM.findDOMNode(this.refs.textInput).value = '';
@@ -177,6 +206,7 @@ export class ChatPage extends Component{
         }else{
             console.log("Uname Exists");
         }
+
     }
 
     unameExists(uname){
@@ -195,20 +225,67 @@ export class ChatPage extends Component{
         ));
     }
 
+    renderGroupUsers(){
+        users = [];
+        users = this.getGroupMembers(this.state.targetGroupID);
+        return users.map((onlineUser) => (
+            <GroupUsers key={onlineUser._id} onlineUser={onlineUser} />
+        ));
+    }
+
+    getGroupMembers(id){
+        let members = [];
+        for(i = 0;i<this.allGroups().length; i++){
+            if(this.allGroups()[i]._id === id){
+                members = this.allGroups()[i].members;
+                break;
+            }
+        }
+        return members;
+    }
+    getGroupInvited(id){
+        let members = [];
+        for(i = 0;i<this.allGroups().length; i++){
+            if(this.allGroups()[i]._id === id){
+                members = this.allGroups()[i].invited;
+                break;
+            }
+        }
+        return members;
+    }
+
+    getGroupAdmins(id){
+        let members = [];
+        for(i = 0;i<this.allGroups().length; i++){
+            if(this.allGroups()[i]._id === id){
+                members = this.allGroups()[i].admins;
+                break;
+            }
+        }
+        return members;
+    }
+
     renderMessages() { // NO PM
+
+
         if(this.state.targetGroupID != null && this.state.targetUser == null){  // GROUP CHAT
+
             let id = this.state.targetGroupID;
+
+
             console.log("Sending ID:  "+ id);
-          
+
             return this.props.groupMessages.map((message) => (
                 <GroupMessage key={message._id} message={message} id = {id} uname={currentUname}/>
             ));
         }
         else if(this.state.targetGroupID == null && this.state.targetUser != null) { // PM
+
             return this.props.privateMessages.map((message) => (
                 <PrivateMessage key={message._id} message={message} uname = {currentUname} targetUname={this.state.targetUser}/>
             ));
         }
+
     }
 
     enableCreateGroup(event){
@@ -217,7 +294,8 @@ export class ChatPage extends Component{
             showCreateGroup: true,
             show: false,
             showDraw: false,
-            showTextEditor: false
+            showTextEditor: false,
+            showEditGroup : false
         });
     }
 
@@ -225,7 +303,7 @@ export class ChatPage extends Component{
         let groupUname = [];
         return this.props.allGroups.map((groupName) => (
 
-            <Groups key={groupName._id} groupName={groupName} uname = {currentUname} showGroupChat={this.showGroupChat.bind(this)} hideGroupChat = {this.hideGroupChat.bind(this)}  />
+            <Groups key={groupName._id} groupName={groupName} uname = {currentUname} showGroupChat={this.showGroupChat.bind(this)} hideGroupChat = {this.hideGroupChat.bind(this)} hideEditGroup={this.hideEditGroup.bind(this)}  showEditGroup={this.showEditGroup.bind(this)} />
         ));
     }
 
@@ -286,8 +364,11 @@ export class ChatPage extends Component{
                     event.target.friend.style.background = "#800000";
                     console.log("friend not in db");
                }
+
             }
         }
+
+
         event.target.friend.value = "";
     }
 
@@ -300,7 +381,9 @@ export class ChatPage extends Component{
                 friends = this.allUsers()[i].friends;
                 break;
             }
+
         }
+
         return friends;
     }
 
@@ -311,8 +394,11 @@ export class ChatPage extends Component{
             if(this.allUsers()[i].uname === uname){
                 valid = true;
             }
+
         }
+
         return valid;
+
     }
     // checks to see if users friend is not already there
     validFriend(friendUname){
@@ -324,7 +410,9 @@ export class ChatPage extends Component{
                     valid = false;
                 }
             }
+
         }
+
         return valid;
     }
 
@@ -340,14 +428,7 @@ export class ChatPage extends Component{
     }
 
     showPM(value){
-         this.setState({
-            show: true,
-            targetUser: value,
-            targetGroupID: null,
-            showCreateGroup: false,
-            showDraw: false,
-            showTextEditor: false
-        });
+        this.setState({show: true, targetUser: value, targetGroupID: null, showCreateGroup: false} );
     }
 
     showGroupChat(groupID){
@@ -388,37 +469,51 @@ export class ChatPage extends Component{
         console.log("VALID: "+ this.state.showCreateGroup);
         let val = this.state.showCreateGroup;
         if(this.state.targetGroupID == null && this.state.targetUser != null){ // PM only
+
             this.state.show = true;
+            this.state.showGroupMembers = false;
             this.state.showCreateGroup= false;
+            this.state.showEditGroup = false;
             if(!(friends.indexOf(this.state.targetUser) > -1)){
                 this.state.targetUser = null;
                 this.state.show = false;
 
             }
-        }else if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat  only
+        }else if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat   only
+            if(!this.state.show){
+                this.state.showEditGroup = true;
+            }else{
+                this.state.showEditGroup = false;
+            }
+            if(this.state.showCreateGroup){ //
+                this.state.showEditGroup = false;
+            }
             this.state.show = true;
+            this.state.showGroupMembers = true;
             this.state.showCreateGroup= false;
             if(!this.groupExists(this.state.targetGroupID)){
                 this.state.show = false;
+                this.state.showGroupMembers = false;
                 this.state.targetGroupID = null;
+                this.state.showEditGroup = false;
             }
+            if(this.state.showEditGroup){
+                this.state.show=false;
+                this.state.showGroupMembers = true;
+                this.state.changeGroup = this.state.targetGroupID;
+            }
+
         }else if(this.state.targetGroupID == null && this.state.targetUser == null){ // no     PM or Group Chat
-            this.state.show = false;
+        this.state.showGroupMembers = false;
+        this.state.show = false;
+        this.state.showEditGroup = false;
         }
 
         if(val){
+            this.state.showGroupMembers = false;
             this.state.show = false;
             this.state.showCreateGroup = true;
         }
-    }
-
-    goToDraw(){
-        this.setState({
-            showDraw: true,
-            show: false,
-            showCreateGroup: false,
-            showTextEditor: false
-        });
     }
 
     goToTextEditor(){
@@ -444,6 +539,12 @@ export class ChatPage extends Component{
         });
     }
 
+    renderPendingGroups(){
+        return this.props.allGroups.map((groupName) => (
+            <PendingGroups key={groupName._id} groupName={groupName} uname = {currentUname}/>
+        ));
+    }
+	
 	scrollToBottom(){
 		setTimeout(function(){
 			var elem = document.getElementById('chatMessagesContent');
@@ -451,12 +552,48 @@ export class ChatPage extends Component{
 		}.bind(this), 100);
 	}
 
-    cancelTextEditor(){
-        this.setState({
-            showTextEditor: false,
-            show: true
-        });
-   }
+	handleGroupChange(event){ //
+        event.preventDefault();
+        let newname = event.target.groupName.value;
+        let newMembers = event.target.email.value;
+        let newAdmins = event.target.admin.value;
+        let temp = [];
+        if(newname.length > 0){
+            // update new group name
+            Meteor.call("updateGroupName", this.state.targetGroupID, newname);
+        }
+
+        if(newMembers.length > 0){
+
+            newMembers = newMembers.replace(/ /g,'');
+            newAdmins = newAdmins.replace(/ /g,'');
+            temp = newMembers.split(",");
+            newMembers = temp;
+            let oldInvited = this.getGroupInvited(this.state.targetGroupID);
+            temp = oldInvited.concat(newMembers);
+            let temp2 = [];
+            for(i = 0; i<temp.length; i++){
+
+                if(temp[i] !== currentUname){
+                    temp2.push(temp[i]);
+                }
+            }//
+
+            Meteor.call("updateGroupInvited", this.state.targetGroupID, temp2);
+        }
+        if(newAdmins.length > 0){
+            temp = newAdmins.split(",");
+            newAdmins = temp;
+            let oldAdmins = this.getGroupAdmins(this.state.targetGroupID);
+            temp = oldAdmins.concat(newAdmins);
+            console.log("Admin List: "+ temp);
+            Meteor.call("updateGroupAdmins", this.state.targetGroupID, temp);
+        }
+        event.target.groupName.value = "";
+        event.target.email.value = "";
+        event.target.admin.value = "";
+        this.hideEditGroup(this.state.targetGroupID);
+    }
 
     render(){
         this.validateTarget();
@@ -484,10 +621,7 @@ export class ChatPage extends Component{
                     </Collapsible>
                     <Collapsible trigger="Pending Groups">
                         <ul>
-                            <li><a href="#">Calvin</a></li>
-                            <li><a href="#">Cameron</a></li>
-                            <li><a href="#">Chloe</a></li>
-                            <li><a href="#">Christina</a></li>
+                            {this.renderPendingGroups()}
                         </ul>
                     </Collapsible>
                 </div>
@@ -497,7 +631,7 @@ export class ChatPage extends Component{
                             <form onSubmit={this.handleSubmit.bind(this)}>
                                 <div className="registrationField">
                                     <div className="UItem1">
-                                        Group Name: <input id="uname" name="groupName" type="text" placeholder="example"/>
+                                        Group Name: <input id="uname" name="groupName" type="text" placeholder="example "/>
                                     </div>
                                     <div className="UItem2">
                                         Invite Members: <input id="uname" name="email" type="text" placeholder="example, example2"/>
@@ -506,6 +640,28 @@ export class ChatPage extends Component{
                                         Admin(s): <input id="uname" name="admin" type="text" placeholder="example, example2"/>
                                     </div>
                                     <div className="register">
+                                        <br></br> <input type="submit" value="Create Group" id="register"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </ToggleDisplay>
+                <ToggleDisplay show={this.state.showEditGroup}>
+                    <div className="Main">
+                        <div className="fieldContainer">
+                            <form onSubmit={this.handleGroupChange.bind(this)}>
+                                <div className="registrationField">
+                                    <div className="UItem1">
+                                        New Group Name: <input id="uname" name="groupName" type="text" placeholder="example "/>
+                                    </div>
+                                    <div className="UItem2">
+                                        Invite Members: <input id="uname" name="email" type="text" placeholder="example, example2"/>
+                                    </div>
+                                    <div className="UItem2">
+                                        Add Admin(s): <input id="uname" name="admin" type="text" placeholder="example, example2"/>
+                                    </div>
+                                    <div className="Save Changes">
                                         <br></br> <input type="submit" value="Create Group" id="register"/>
                                     </div>
                                 </div>
@@ -525,12 +681,8 @@ export class ChatPage extends Component{
                         <div id="chatMessagesBottom">
                             <form onSubmit={this.handleMessageSubmit.bind(this)} >
                                 <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here" />
-                                <button id="customButton">Send</button>
+                                <button id="customButton" >Send</button>
                             </form>
-                            <span>
-                                <button onClick={this.goToDraw}>Draw</button>
-                                <button onClick={this.goToTextEditor}>TextEditor</button>
-                            </span>
                         </div>
                     </div>
                 </ToggleDisplay>
@@ -551,6 +703,14 @@ export class ChatPage extends Component{
                             {this.renderOnlineUsers()}
                         </ul>
                     </Collapsible>
+                    <ToggleDisplay show={this.state.showGroupMembers}>
+                        <Collapsible trigger="Group Users">
+                            <ul id="onlineUser">
+                                {this.renderGroupUsers()}
+                            </ul>
+                        </Collapsible>
+                    </ToggleDisplay>
+
                 </div>
                 <footer>
                     <div id="footer">

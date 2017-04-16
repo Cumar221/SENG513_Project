@@ -132,13 +132,27 @@ Meteor.methods({
         AllGroups.update({_id : id},{$set:{members: newMembers}});
     },
 
+    updateGroupInvited: function(id, invited){
 
+        AllGroups.update({_id : id},{$set:{invited: invited}});
+    },
+
+    updateGroupName: function(id, newName){
+
+        AllGroups.update({_id : id},{$set:{groupName: newName}});
+    },
+
+    updateGroupAdmins: function(id, newAdmins){
+
+        AllGroups.update({_id : id},{$set:{admins: newAdmins}}); //
+    },
 
     newGroup: function(groupName, members, admins, owner){
         AllGroups.insert({
             owner: owner,
             groupName: groupName,
-            members: members,
+            invited: members,
+            members: [owner],
             admins: admins
         });
     },
