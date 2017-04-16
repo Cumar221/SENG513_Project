@@ -38,8 +38,8 @@ export default class UploadImages extends Component{
         }
         else if(this.props.targetGroupID == null && this.props.targetUname != null){// PM
             Meteor.call('addPrivateMessage',{file: fileResponse.secure_url, uname: this.props.uname, targetUname: this.props.targetUname});
-        }///
-}
+        }
+    }
 
     render(){
         return(
@@ -56,4 +56,3 @@ export default class UploadImages extends Component{
         )
     }
 }
-

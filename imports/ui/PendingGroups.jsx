@@ -4,8 +4,6 @@ export default class PendingGroups extends Component {
 
     handleClick(event){
         event.preventDefault();
-
-
     }
 
     allGroups(){
@@ -31,17 +29,12 @@ export default class PendingGroups extends Component {
         Meteor.call("updateGroupInvited", this.props.groupName._id, invited); ///
     }
 
-
-
-
     getGroupOwner(id){
         for(i = 0; i< this.allGroups().length; i++){
             if(this.allGroups()[i]._id === id){
                 return this.allGroups()[i].owner;
             }
-
         }
-
         return null;
     }
 
