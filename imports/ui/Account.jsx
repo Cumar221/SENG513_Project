@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { AllUsers } from '../api/allUsers.js';
+import { AllGroups } from '../api/allGroups.js';
 import {Link} from "react-router-dom";
 import { browserHistory } from 'react-router'
 
@@ -10,6 +11,37 @@ class Account extends Component {
     allUsers(){
         return AllUsers.find().fetch();
     }
+    allGroups(){
+        return AllGroups.find().fetch();
+    }
+
+    getUnameOwnerID(oldUname){
+        let id = [];
+        for(i = 0; i<this.allGroups().length; i++){
+            if(this.allGroups()[i].owner === oldUname){
+                id.push(this.allGroups()[i]._id);
+            }
+        }
+        return id;
+    }
+
+    getUnameMemberID(oldUname, newUname){
+        let id = [];
+        for(i = 0; i<this.allGroups().length; i++){
+            if(this.allGroups()[i].members.indexOf(oldUname) > -1){
+                let mem = [];
+                mem = this.allGroups()[i].members;
+                temp = mem.splice(mem.indexOf(oldUname), 1);
+                mem = temp;
+                mem.push(newUname);
+
+                id.push({id: this.allGroups()[i]._id, members: mem});
+            }
+        }
+        return id;
+    }
+
+
 
     handleSubmit(event){
         event.preventDefault();
@@ -60,6 +92,23 @@ class Account extends Component {
                       this.hideErrorMsg(newUnameMsg);
                         event.target.username.style.background = "#00b300";
                         Meteor.call("updateUsername", this.allUsers()[this.getUnameIndex(currentUname)]._id, newUname );
+
+                        ////////// Update All Groups Owners//////////
+                        let id = [];
+                        id = this.getUnameOwnerID(currentUname);
+                        if(id.length != 0){
+                            for(i = 0; i< id.length; i++){
+                                Meteor.call("updateGroupOwner", id[i], newUname );
+                            }
+                        }
+                        ///////// Update All Groups Members ////////
+                        let memberAndID = this.getUnameMemberID(currentUname, newUname);
+                        if(memberAndID.length != 0){
+                            for(i = 0; i< memberAndID.length; i++){
+                                Meteor.call("updateGroupMembers", memberAndID[i].id, memberAndID[i].members );
+                            }
+                        }
+
                         console.log("Username Changed");
                         this.props.match.params.value = newUname;
                     }
