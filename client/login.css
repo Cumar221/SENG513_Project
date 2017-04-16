@@ -91,14 +91,14 @@ body {
 #incorrectPassword, #incorrectEmail, #incorrectUsername, #nonMatch, #noChanges, #matchesOldPass {
   display: none;
   color: #800000;
-
-
 }
+
 #invalidLogin {
   display: none;
   color: #800000;
   padding-bottom: 5px;
 }
+
  #emptyUsrname, #emptyPass, #emptyEm, #emptyPass1, #emptyPass2, #takenUsrname, #takenEm {
   display: none;
   color: #800000;
@@ -110,9 +110,8 @@ body {
     background: #566771;
     float: left;
     text-align: right;
-
-
 }
+
 .register{
     margin-top: 5%;
     padding-right: 10%;

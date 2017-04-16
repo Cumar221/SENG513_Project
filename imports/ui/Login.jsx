@@ -52,8 +52,8 @@ class Login extends Component {
         }
         else{
             console.log("Password or Username Empty");
-
             document.getElementById('invalidLogin').style.display = 'none';
+        }
 
             if (uname.length === 0) {
               event.target.username.style.background = "#800000";

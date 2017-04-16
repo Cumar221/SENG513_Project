@@ -34,6 +34,8 @@ cfs:tempstore@0.1.5
 cfs:upload-http@0.0.20
 cfs:worker@0.1.4
 check@1.2.5
+chipcastledotcom:jspdf@0.0.2
+chipcastledotcom:meteor-jspdf@0.0.8
 ddp@1.2.5
 ddp-client@1.3.4
 ddp-common@1.2.8
