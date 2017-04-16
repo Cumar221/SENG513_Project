@@ -17,21 +17,23 @@ import TextEditor from './TextEditor.jsx';
 import Friends from "./Friends.jsx";
 import {PrivateMessages} from "../api/privateMessages.js";
 import PrivateMessage from "./PrivateMessage.jsx";
+import GroupMessage from "./GroupMessage.jsx";
+import {GroupMessages} from "../api/groupMessages.js";
 let currentUname = "";
 let control = true;
 
 export class ChatPage extends Component{
     constructor(props) {
-        super(props)
-      
+        super(props);
         this.onUnload = this.onUnload.bind(this);
         // string to boolean conversion
         let bool= false;
         if(this.props.match.params.value === "true"){
             bool = true;
         }
+      
        currentUname = this.props.match.params.uname;
-        this.state={show: bool, showCreateGroup: false, targetUser: "null" , showDraw: false, showTextEditor: false};
+        this.state={show: bool, showCreateGroup: false, targetUser: "null" ,  targetGroupID: null, showDraw: false, showTextEditor: false};
         this.cancelDraw       = this.cancelDraw.bind(this);
         this.cancelTextEditor = this.cancelTextEditor.bind(this);
         this.goToDraw         = this.goToDraw.bind(this);
@@ -56,11 +58,12 @@ export class ChatPage extends Component{
     }
 
     onUnload(event) {
-        {this.removeOnlineUser();}
+        //this.removeOnlineUser(currentUname);
         this.state.showCreateGroup = false;
     }
 
     componentDidMount() {
+        currentUname = this.props.match.params.uname;
         {this.handleOnlineUser();}
         window.addEventListener("beforeunload", this.onUnload)
     }
@@ -69,13 +72,20 @@ export class ChatPage extends Component{
         window.removeEventListener("beforeunload", this.onUnload)
     }
 
-    removeOnlineUser(event) {
-        let {currentUID} = this.props.location.state;
-        let id = OnlineUsers.findOne({uname: currentUID});
+    removeOnlineUser(uname) {
+        let currentUID = currentUname;
+        console.log(currentUID);
+        let index = -1;
+        for(i = 0; i<this.onlineUsers().length; i++){
+            if(this.onlineUsers()[i].uname === currentUID){
+                index = i;
+                break;
+            }
+        }
+        let id = this.onlineUsers()[index]._id;
 
-        console.log("delete");
         if(id != undefined){
-            OnlineUsers.remove(id._id);
+            Meteor.call("removeUname",id);
         }
     }
 
@@ -104,22 +114,9 @@ export class ChatPage extends Component{
                 emails = emails.replace(/ /g,'');
                 temp = emails.split(",");
                 emails = temp;
-                str = "";
-
-                for(i = 0; i<emails.length; i++){
-                    str += emails[i]+",";
-                }
-
-                emails = str;
-
                 temp = admins.split(",");
                 admins = temp;
-                str = "";
-                for(i = 0; i<admins.length; i++){
-                    str += admins[i]+",";
-                }
 
-                admins = str;
                 let valid = true;
 
                 for(i=0; i< this.allGroups().length; i++){
@@ -131,6 +128,7 @@ export class ChatPage extends Component{
                 }
 
                 if(valid){
+                    console.log(emails);
                     Meteor.call("newGroup", groupName, emails, admins, currentUname);
 
                     event.target.groupName.value = "";
@@ -145,32 +143,50 @@ export class ChatPage extends Component{
                 event.target.groupName.style.background = "#800000";
             }
 
-
         }else{
             event.target.email.style.background = "#800000";
             console.log("no emails given");
-
         }
     }
 
     handleMessageSubmit(event) {
-
         event.preventDefault();
         const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
-        if(this.state.targetUser === "null"){
-            Meteor.call('addMessage',{text: text, uname: currentUname});
-        }else{// PM
-            console.log("SENDING PM TO SERVER");
-            Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser});
 
+        if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat
+            if(text.length > 0){
+
+                Meteor.call('addGroupMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser, targetGroupID: this.state.targetGroupID});
+            }
         }
-
+        else if(this.state.targetGroupID == null && this.state.targetUser != null){// PM
+		    	  if(text.length > 0){
+				      Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser});
+			      }
+		          this.scrollToBottom();	
+        }
         // Clear form
         ReactDOM.findDOMNode(this.refs.textInput).value = '';
     }
 
     handleOnlineUser(){
-        Meteor.call('addOnlineUser', {uname: currentUname});
+        console.log(this.onlineUsers());
+        if(!this.unameExists(currentUname)){
+            console.log("Uname Doesnt exist");
+            Meteor.call('addOnlineUser', {uname: currentUname});
+        }else{
+            console.log("Uname Exists");
+        }
+    }
+
+    unameExists(uname){
+        let flag = false;
+        for(i = 0; i< this.onlineUsers().length; i++){
+            if(this.onlineUsers()[i].uname === uname){
+                flag = true;
+            }
+        }
+        return flag;
     }
 
     renderOnlineUsers() {
@@ -180,18 +196,19 @@ export class ChatPage extends Component{
     }
 
     renderMessages() { // NO PM
-        console.log("MESSAGES");
-        if(this.state.targetUser === "null"){
-            return this.props.messages.map((message) => (
-                <Message key={message._id} message={message} uname = {currentUname}/>
+        if(this.state.targetGroupID != null && this.state.targetUser == null){  // GROUP CHAT
+            let id = this.state.targetGroupID;
+            console.log("Sending ID:  "+ id);
+          
+            return this.props.groupMessages.map((message) => (
+                <GroupMessage key={message._id} message={message} id = {id} uname={currentUname}/>
             ));
-        }else{ // PM
-            console.log("RENDERING PM");
+        }
+        else if(this.state.targetGroupID == null && this.state.targetUser != null) { // PM
             return this.props.privateMessages.map((message) => (
                 <PrivateMessage key={message._id} message={message} uname = {currentUname} targetUname={this.state.targetUser}/>
             ));
         }
-
     }
 
     enableCreateGroup(event){
@@ -206,10 +223,31 @@ export class ChatPage extends Component{
     }
 
     renderGroups(){
+        let groupUname = [];
         return this.props.allGroups.map((groupName) => (
 
-            <Groups key={groupName._id} groupName={groupName} uname = {currentUname} />
+            <Groups key={groupName._id} groupName={groupName} uname = {currentUname} showGroupChat={this.showGroupChat.bind(this)} hideGroupChat = {this.hideGroupChat.bind(this)}  />
         ));
+    }
+
+    fillUnames(groupMember){
+        let groupUnames = [];
+        for(i = 0; i<this.allGroups().length; i++){
+
+        }
+    }
+
+    isMember(groupName){
+        flag = false;
+        for(i = 0; i<this.allGroups().length; i++){
+            if(this.allGroups()[i].groupName === groupName){
+                if(this.allGroups()[i].members.indexOf(currentUname) > -1){
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        return flag;
     }
 
     handleAddFriend(event){
@@ -248,9 +286,9 @@ export class ChatPage extends Component{
                 }else{ // user is not online
                     event.target.friend.style.background = "#800000";
                     console.log("friend not in db");
-                  }
-              }
-          }
+               }
+            }
+        }
         event.target.friend.value = "";
     }
 
@@ -303,45 +341,82 @@ export class ChatPage extends Component{
     }
 
     showPM(value){
-        this.setState({
+         this.setState({
             show: true,
             targetUser: value,
+            targetGroupID: null,
             showCreateGroup: false,
             showDraw: false,
             showTextEditor: false
         });
     }
 
+    showGroupChat(groupID){
+        this.setState({show:true, targetUser: null, targetGroupID: groupID, showCreateGroup: false});
+    }
+
+    hideGroupChat(username){
+        if(currentUname === username){
+
+            this.setState({show: false, targetUser: null, targetGroupID: null});
+        }
+    }
+
     hidePM(value){
-        this.setState({show: false, targetUser: value} );
+        this.setState({show: false, targetUser: null, targetGroupID: null} );
     }
 
     renderFriends(){
         let friends = [];
+
         friends = this.getFriends(currentUname);
+
         return friends.map((allUsers) => (
             <Friends key={allUsers._id} allUsers={allUsers} uname={currentUname} targetUser={this.state.targetUser} showPM={this.showPM.bind(this)} hidePM={this.hidePM.bind(this)}/>
         ));
     }
 
-    button(){
-        console.log("TESTING BUTTON "+this.state.targetUser);
-        if(this.state.targetUser === "null"){
-            return true;
-        }else{
-            return false;
+
+
+    groupExists(id){
+        for(i = 0; i< this.allGroups().length; i++){
+            if(this.allGroups()[i]._id == id){
+                return true;
+            }
         }
+        return false;
     }
 
     validateTarget(){
         friends = [];
         friends = this.getFriends(currentUname);
 
-        if(!(friends.indexOf(this.state.targetUser) > -1)){
-            this.state.targetUser = "null";
+        console.log("VALID: "+ this.state.showCreateGroup);
+        let val = this.state.showCreateGroup;
+        if(this.state.targetGroupID == null && this.state.targetUser != null){ // PM only
+            this.state.show = true;
+            this.state.showCreateGroup= false;
+            if(!(friends.indexOf(this.state.targetUser) > -1)){
+                this.state.targetUser = null;
+                this.state.show = false;
+
+            }
+        }else if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat  only
+            this.state.show = true;
+            this.state.showCreateGroup= false;
+            if(!this.groupExists(this.state.targetGroupID)){
+                this.state.show = false;
+                this.state.targetGroupID = null;
+            }
+        }else if(this.state.targetGroupID == null && this.state.targetUser == null){ // no     PM or Group Chat
             this.state.show = false;
         }
-     }
+
+        if(val){
+            this.state.show = false;
+            this.state.showCreateGroup = true;
+        }
+    }
 
     goToDraw(){
         this.setState({
@@ -361,30 +436,84 @@ export class ChatPage extends Component{
         });
     }
 
-    cancelDraw(){
-        this.setState({
-            showDraw: false,
-            show: true
-        });
-    }
+        /*
+        if(this.state.targetGroupID ==  null){
+            if(this.state.targetUser == false){
+                console.log("1");
+                this.state.show = true;
+            }
+            if(this.state.targetUser == null){
+                console.log("2");
+                this.state.show = false;
+            }
+
+            if(!(friends.indexOf(this.state.targetUser) > -1)){
+                this.state.targetUser = "null";
+                this.state.show = false;
+
+            }
+        }else{
+            if(!this.groupExists(this.state.targetGroupID)){
+                this.state.show = false;
+                console.log("Group Doesnt Exist Anymore");
+            }else{
+                this.state.show = true;
+                console.log("");
+            }
+
+        }
+
+        /*
+        if(this.state.targetUser == false){
+            console.log("1");
+            this.state.show = true;
+        }
+        else if(this.state.targetUser == null){
+            console.log("2");
+            this.state.show = false;
+        }else if(this.state.targetGroupID != null){
+            console.log("3");
+            console.log("Group ID not NULL")
+            if(!(this.allGroups().indexOf(this.state.targetGroupID) > -1)){
+                this.state.show = false;
+                console.log("Group Doesnt Exist Anymore");
+            }
+        }
+        else{
+            console.log("4");
+            if(!(friends.indexOf(this.state.targetUser) > -1)){
+                this.state.targetUser = "null";
+                this.state.show = false;
+
+            }
+        }
+        */
+	
+	scrollToBottom(){
+		setTimeout(function(){
+			var elem = document.getElementById('chatMessagesContent');
+			elem.scrollTop = elem.scrollHeight ;
+		}.bind(this), 100);
+	}
 
     cancelTextEditor(){
         this.setState({
             showTextEditor: false,
             show: true
         });
-    }
+   }
 
     render(){
-        this.validateTarget();
 
+        this.validateTarget();
+        currentUname = this.props.match.params.uname;
         console.log("FLAG: "+ this.state.show);
         return(
             <div>
                 <div id="header">
                     <ul id="nav">
-                        <li><Link to={'/Account/'+currentUname }>Account</Link></li>
-                        <li><Link to="/" onClick={this.removeOnlineUser}>Sign Out</Link></li>
+                        <li><Link onClick={this.removeOnlineUser.bind(this)} to={'/Account/'+currentUname }>Account</Link></li>
+                        <li><Link to="/" onClick={this.removeOnlineUser.bind(this)}>Sign Out</Link></li>
                     </ul>
                 </div>
                 <div id="chatChannelContainer">
@@ -417,10 +546,10 @@ export class ChatPage extends Component{
                                         Group Name: <input id="uname" name="groupName" type="text" placeholder="example"/>
                                     </div>
                                     <div className="UItem2">
-                                        Invite Members: <input id="uname" name="email" type="text" placeholder="example@example.com"/>
+                                        Invite Members: <input id="uname" name="email" type="text" placeholder="example, example2"/>
                                     </div>
                                     <div className="UItem2">
-                                        Admin(s): <input id="uname" name="admin" type="text" placeholder="example@example.com"/>
+                                        Admin(s): <input id="uname" name="admin" type="text" placeholder="example, example2"/>
                                     </div>
                                     <div className="register">
                                         <br></br> <input type="submit" value="Create Group" id="register"/>
@@ -436,6 +565,7 @@ export class ChatPage extends Component{
                             <ul id="msgCSS">
                                 <Upload uname={currentUname} targetUname={this.state.targetUser}/>
                                 {this.renderMessages()}
+								                {this.scrollToBottom()}
                             </ul>
                         </div>
                         <div id="chatMessagesBottom">
@@ -456,7 +586,6 @@ export class ChatPage extends Component{
                 <ToggleDisplay show={this.state.showTextEditor}>
                     <TextEditor cancel={this.cancelTextEditor} uname={currentUname} targetUname={this.state.targetUser}/>
                 </ToggleDisplay>
-
                 <div id="chatOnlineContainer">
                     <form onSubmit={this.handleAddFriend.bind(this)}>
                         <label id="addFriends">Add Friends:</label>
@@ -485,6 +614,7 @@ ChatPage.propTypes = {
     allGroups: PropTypes.array.isRequired,
     allUsers: PropTypes.array.isRequired,
     privateMessages: PropTypes.array.isRequired,
+    groupMessages : PropTypes.array.isRequired,
 };
 
 export default createContainer(() => {
@@ -493,6 +623,7 @@ export default createContainer(() => {
         onlineUsers: OnlineUsers.find({}).fetch(),
         allGroups:  AllGroups.find().fetch(),
         allUsers:  AllUsers.find().fetch(),
-        privateMessages:  PrivateMessages.find().fetch()
+        privateMessages:  PrivateMessages.find().fetch(),
+        groupMessages:  GroupMessages.find().fetch()
     }
 }, ChatPage);

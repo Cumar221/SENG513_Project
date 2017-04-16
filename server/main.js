@@ -5,6 +5,7 @@ import { AllUsers } from '../imports/api/allUsers.js';
 import { OnlineUsers } from '../imports/api/onlineUsers.js';
 import { AllGroups } from '../imports/api/allGroups.js';
 import {PrivateMessages} from "../imports/api/privateMessages.js";
+import {GroupMessages} from "../imports/api/groupMessages.js";
 
 Meteor.methods({
     addNewUser: function (obj) {
@@ -13,20 +14,34 @@ Meteor.methods({
         let uname = obj.uname;
         let email = obj.email;
         let pass = obj.pass;
+		let secret = obj.secret;
         AllUsers.insert({
             uname,
             email,
             pass,
+			secret,
             friends: [],
         });
     },
 
     addOnlineUser: function (obj) {
         let uname = obj.uname;
+        let onlineUsers = OnlineUsers.find().fetch();
+        let flag = false;
 
-        OnlineUsers.insert({
-            uname,
-        });
+        for(i = 0; i<onlineUsers.length; i++){
+            if(onlineUsers[i].uname === uname){
+                flag = true;
+            }
+        }
+
+        if(!flag){
+            OnlineUsers.insert({
+                uname,
+            });
+        }
+
+
     },
 
     addMessage: function (messageData) {
@@ -60,8 +75,27 @@ Meteor.methods({
         });
     },
 
+    addGroupMessage: function (messageData) {
+        messageData.date = new Date();
+        let text = messageData.text;
+        let file = messageData.file;
+        let uname = messageData.uname;
+        let targetGroupID = messageData.targetGroupID;
+        GroupMessages.insert({
+            text,
+            file,
+            uname,
+            targetGroupID,
+            createdAt: new Date(), // current time
+        });
+    },
+
     updateUsername: function(id, uname){
         AllUsers.update({_id : id},{$set:{uname: uname}});
+    },
+
+    removeUname: function(id){
+        OnlineUsers.remove({_id: id})
     },
 
     updateEmail: function(id, email){
@@ -71,9 +105,31 @@ Meteor.methods({
     updatePassword: function(id, pass){
         AllUsers.update({_id : id},{$set:{pass: pass}});
     },
+	
+	updateSecret: function(id, secret){
+        AllUsers.update({_id : id},{$set:{secret: secret}});
+    },
 
     addFriend: function(id, friendList){
         AllUsers.update({_id : id},{$set:{friends: friendList}});
+    },
+
+    addGroupMember: function(id, members){
+        AllGroups.update({_id : id},{$set:{members: members}});
+    },
+
+    removeGroup: function(id){
+        AllGroups.remove({_id: id });
+    },
+
+    updateGroupOwner: function(id, newUname){
+
+        AllGroups.update({_id : id},{$set:{owner: newUname}});
+    },
+
+    updateGroupMembers: function(id, newMembers){
+
+        AllGroups.update({_id : id},{$set:{members: newMembers}});
     },
 
 

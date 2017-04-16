@@ -31,7 +31,7 @@ body {
 .userField{
     background: #566771;
     float: left;
-    text-align: right;
+    text-align: left;
     padding-left: 20%;
 
 }
@@ -70,26 +70,48 @@ body {
     background: #6e7e8b;
     color: black;
 }
+
+#register:hover {
+	background-color: #4aa8e2;
+}
+
+#login:hover {
+	background-color: #4aa8e2;
+}
+
 #login, #register{
     width: 190px;
     height: 40px;
     background: #328dc6;
     border: hidden;
     color: black;
+	transition: .3s;
 }
 
 #incorrectPassword, #incorrectEmail, #incorrectUsername, #nonMatch, #noChanges, #matchesOldPass {
   display: none;
+  color: #800000;
+}
 
+#invalidLogin {
+  display: none;
+  color: #800000;
+  padding-bottom: 5px;
+}
+
+ #emptyUsrname, #emptyPass, #emptyEm, #emptyPass1, #emptyPass2, #takenUsrname, #takenEm {
+  display: none;
+  color: #800000;
+  float: right;
+  padding-left: 5px;
 }
 
 .registrationField {
     background: #566771;
     float: left;
     text-align: right;
-
-
 }
+
 .register{
     margin-top: 5%;
     padding-right: 10%;
