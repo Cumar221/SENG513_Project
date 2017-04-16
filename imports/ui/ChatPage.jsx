@@ -126,10 +126,6 @@ export class ChatPage extends Component{
                 temp = emails.split(",");
                 emails = temp;
 
-
-
-
-
                 temp = admins.split(",");
                 admins = temp;
 
@@ -175,10 +171,6 @@ export class ChatPage extends Component{
             console.log("no emails given");
 
         }
-
-
-
-
     }
 
     handleMessageSubmit(event) {
@@ -691,13 +683,12 @@ export class ChatPage extends Component{
                             </ul>
                         </div>
                         <div id="chatMessagesBottom">
-                            <form onSubmit={this.handleMessageSubmit.bind(this)} >
+                            <form id="chatForm" onSubmit={this.handleMessageSubmit.bind(this)} >
                                 <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here" />
-                                <button id="customButton" >Send</button>
                             </form>
                             <span>
-                                <button onClick={this.goToDraw}>Draw</button>
-                                <button onClick={this.goToTextEditor}>TextEditor</button>
+                                <button  id="customButton" onClick={this.goToDraw}>Draw</button>
+                                <button  id="customButton" onClick={this.goToTextEditor}>TextEditor</button>
                             </span>
                         </div>
                     </div>
