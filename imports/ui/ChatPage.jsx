@@ -197,7 +197,12 @@ export class ChatPage extends Component{
     enableCreateGroup(event){
         event.preventDefault();
 
-        this.setState({showCreateGroup: true});
+        this.setState({
+            showCreateGroup: true,
+            show: false,
+            showDraw: false,
+            showTextEditor: false
+        });
     }
 
     renderGroups(){
@@ -298,7 +303,13 @@ export class ChatPage extends Component{
     }
 
     showPM(value){
-        this.setState({show: true, targetUser: value} );
+        this.setState({
+            show: true,
+            targetUser: value,
+            showCreateGroup: false,
+            showDraw: false,
+            showTextEditor: false
+        });
     }
 
     hidePM(value){
@@ -335,14 +346,18 @@ export class ChatPage extends Component{
     goToDraw(){
         this.setState({
             showDraw: true,
-            show: false
+            show: false,
+            showCreateGroup: false,
+            showTextEditor: false
         });
     }
 
     goToTextEditor(){
         this.setState({
             showTextEditor: true,
-            show: false
+            show: false,
+            showCreateGroup: false,
+            showDraw: false,
         });
     }
 
@@ -426,7 +441,7 @@ export class ChatPage extends Component{
                         <div id="chatMessagesBottom">
                             <form onSubmit={this.handleMessageSubmit.bind(this)} >
                                 <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here" />
-                                <button id="customButton" >Send</button>
+                                <button id="customButton">Send</button>
                             </form>
                             <span>
                                 <button onClick={this.goToDraw}>Draw</button>
@@ -436,7 +451,7 @@ export class ChatPage extends Component{
                     </div>
                 </ToggleDisplay>
                 <ToggleDisplay show={this.state.showDraw}>
-                    <Draw cancel={this.cancelDraw}/>
+                    <Draw cancel={this.cancelDraw} uname={currentUname} targetUname={this.state.targetUser}/>
                 </ToggleDisplay>
                 <ToggleDisplay show={this.state.showTextEditor}>
                     <TextEditor cancel={this.cancelTextEditor}/>
