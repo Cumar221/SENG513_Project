@@ -7,9 +7,9 @@ const UPLOADPRESET = 'xeckeflq';
 const APIKEY = '299182963357756';
 
 const dropZoneStyle = {
-    position: 'fixed',
-    height: '100%',
-    width: '50%',
+    position: 'absolute',
+    height: '91%',
+    width: '80%',
     zIndex: 0,
 };
 

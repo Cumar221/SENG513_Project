@@ -31,3 +31,4 @@ cfs:graphicsmagick
 cfs:filesystem
 ecmascript@0.6.3
 fortawesome:fontawesome
+chipcastledotcom:meteor-jspdf

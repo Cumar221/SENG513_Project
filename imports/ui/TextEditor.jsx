@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import {Editor, EditorState, RichUtils, convertToRaw} from 'draft-js';
 import RichTextEditor from 'react-rte';
-import pdf  from 'html-pdf';
 
 const URL =  "https://api.cloudinary.com/v1_1/df9evoecg/image/upload";
 const UPLOADPRESET = 'xeckeflq';
@@ -28,11 +26,10 @@ const styles = {
 export default class TextEditor extends Component {
     constructor(props) {
         super(props);
-        this.state = {editorState: EditorState.createEmpty(), value: RichTextEditor.createEmptyValue()};
+        this.state = {value: RichTextEditor.createEmptyValue()};
         this.onChange = (value) => this.setState({value});
         this.cancel  = this.cancel.bind(this);
         this.send = this.send.bind(this);
-        this.handleKeyCommand = this.handleKeyCommand.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
 
         propTypes = {
@@ -45,19 +42,14 @@ export default class TextEditor extends Component {
         this.props.cancel();
     }
 
-    handleKeyCommand(command) {
-        const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
-        if (newState) {
-            this.onChange(newState);
-            return 'handled';
-        }
-        return 'not-handled';
-    }
-
     send(event) {
         event.preventDefault();
-        const content = this.state.value.toString('html');
-        this.handleUpload(content);
+        const html = this.state.value.toString('html');
+
+        var pdf = new jsPDF('p', 'pt', 'letter');
+        pdf.fromHTML(html);
+        let test = pdf.output('datauristring');
+        this.handleUpload(test);
         this.props.cancel();
     }
 

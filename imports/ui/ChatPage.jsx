@@ -454,7 +454,7 @@ export class ChatPage extends Component{
                     <Draw cancel={this.cancelDraw} uname={currentUname} targetUname={this.state.targetUser}/>
                 </ToggleDisplay>
                 <ToggleDisplay show={this.state.showTextEditor}>
-                    <TextEditor cancel={this.cancelTextEditor}/>
+                    <TextEditor cancel={this.cancelTextEditor} uname={currentUname} targetUname={this.state.targetUser}/>
                 </ToggleDisplay>
 
                 <div id="chatOnlineContainer">
