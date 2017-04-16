@@ -19,6 +19,9 @@ import PendingGroups from "./PendingGroups.jsx";
 import GroupMessage from "./GroupMessage.jsx";
 import GroupUsers from "./GroupUsers.jsx";
 import {GroupMessages} from "../api/groupMessages.js";
+import Draw from './Draw.jsx';
+import TextEditor from './TextEditor.jsx';
+
 let currentUname = "";
 let control = true;
 
