@@ -7,7 +7,6 @@ import { browserHistory } from 'react-router'
 class Login extends Component {
     constructor(){
         super();
-
     }
 
     allUsers(){
@@ -48,28 +47,21 @@ class Login extends Component {
               //Unveil error message
               document.getElementById('invalidLogin').style.display = 'inline';
             }
-
         }
         else{
             console.log("Password or Username Empty");
             document.getElementById('invalidLogin').style.display = 'none';
         }
 
-            if (uname.length === 0) {
-              event.target.username.style.background = "#800000";
-              this.emptyUsername(true);
-            }
-
-            if (password.length === 0) {
-              event.target.password.style.background = "#800000";
-              this.emptyPassword(true);
-            }
+        if (uname.length === 0) {
+          event.target.username.style.background = "#800000";
+          this.emptyUsername(true);
         }
-
+    }
+  
     resetColors(event){
         event.target.username.style.background = "#6e7e8b";
         event.target.password.style.background = "#6e7e8b";
-
     }
 
     emptyUsername(empty){
@@ -125,9 +117,16 @@ class Login extends Component {
         else {
             document.getElementById('emptyPass').style.display = 'none';
         }
-
     }
 
+    emptyPassword(empty) {
+      if (empty) {
+        document.getElementById('emptyPass').style.display = 'inline';
+      }
+      else {
+        document.getElementById('emptyPass').style.display = 'none';
+      }
+    }
 
     render() {
         return(
@@ -148,11 +147,9 @@ class Login extends Component {
                             <p>Please enter a password</p>
                         </div>
                         <br></br>
-
                     </div>
                     <br></br>
                     <div className="logInButton">
-
                         <Link to="/forgotPass">Forgot your password?</Link>
                         <br></br>
                         <br></br>
@@ -160,14 +157,10 @@ class Login extends Component {
                         <br></br>
                         <br></br>
                         New User? <Link to="/register">Register Here</Link>
-
                     </div>
                 </form>
-
             </div>
-
         );
-
     }
 }
 

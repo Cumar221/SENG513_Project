@@ -19,6 +19,9 @@ import PendingGroups from "./PendingGroups.jsx";
 import GroupMessage from "./GroupMessage.jsx";
 import GroupUsers from "./GroupUsers.jsx";
 import {GroupMessages} from "../api/groupMessages.js";
+import Draw from './Draw.jsx';
+import TextEditor from './TextEditor.jsx';
+
 let currentUname = "";
 let control = true;
 
@@ -31,8 +34,14 @@ export class ChatPage extends Component{
         if(this.props.match.params.value === "true"){
             bool = true;
         }
+      
         currentUname = this.props.match.params.uname;
-        this.state={show: bool, showCreateGroup: false, showEditGroup: false, showGroupMembers: false,   targetUser: null, targetGroupID: null, changeGroup: null};
+        this.state={show: bool, showCreateGroup: false, targetUser: "null" ,  showEditGroup: false, showGroupMembers: false, targetGroupID: null, showDraw: false, changeGroup: null , showTextEditor: false};
+        this.cancelDraw       = this.cancelDraw.bind(this);
+        this.cancelTextEditor = this.cancelTextEditor.bind(this);
+        this.goToDraw         = this.goToDraw.bind(this);
+        this.goToTextEditor   = this.goToTextEditor.bind(this);
+        this.onUnload         = this.onUnload.bind(this);
     }
 
     privateMessages(){
@@ -117,10 +126,6 @@ export class ChatPage extends Component{
                 temp = emails.split(",");
                 emails = temp;
 
-
-
-
-
                 temp = admins.split(",");
                 admins = temp;
 
@@ -166,14 +171,9 @@ export class ChatPage extends Component{
             console.log("no emails given");
 
         }
-
-
-
-
     }
 
     handleMessageSubmit(event) {
-
         event.preventDefault();
         const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
 
@@ -184,13 +184,11 @@ export class ChatPage extends Component{
             }
         }
         else if(this.state.targetGroupID == null && this.state.targetUser != null){// PM
-			if(text.length > 0){
-
-				Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser});
-			}
-		this.scrollToBottom();	
+            if(text.length > 0){
+                Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser});
+            }
+            this.scrollToBottom();	
         }
-
         // Clear form
         ReactDOM.findDOMNode(this.refs.textInput).value = '';
     }
@@ -301,8 +299,13 @@ export class ChatPage extends Component{
 
     enableCreateGroup(event){
         event.preventDefault();
-
-        this.setState({showCreateGroup: true, show: false, showEditGroup : false});
+        this.setState({
+            showCreateGroup: true,
+            show: false,
+            showDraw: false,
+            showTextEditor: false,
+            showEditGroup : false
+        });
     }
 
     renderGroups(){
@@ -318,7 +321,6 @@ export class ChatPage extends Component{
         for(i = 0; i<this.allGroups().length; i++){
 
         }
-
     }
 
     isMember(groupName){
@@ -444,7 +446,6 @@ export class ChatPage extends Component{
 
     hideGroupChat(username){
         if(currentUname === username){
-
             this.setState({show: false, targetUser: null, targetGroupID: null});
         }
     }
@@ -455,15 +456,11 @@ export class ChatPage extends Component{
 
     renderFriends(){
         let friends = [];
-
         friends = this.getFriends(currentUname);
-
         return friends.map((allUsers) => (
             <Friends key={allUsers._id} allUsers={allUsers} uname={currentUname} targetUser={this.state.targetUser} showPM={this.showPM.bind(this)} hidePM={this.hidePM.bind(this)}/>
         ));
     }
-
-
 
     groupExists(id){
         for(i = 0; i< this.allGroups().length; i++){
@@ -526,63 +523,38 @@ export class ChatPage extends Component{
             this.state.show = false;
             this.state.showCreateGroup = true;
         }
+    }
 
+    goToDraw(){
+        this.setState({
+            showDraw: true,
+            show: false,
+            showCreateGroup: false,
+            showTextEditor: false
+        });
+    }
 
+    goToTextEditor(){
+        this.setState({
+            showTextEditor: true,
+            show: false,
+            showCreateGroup: false,
+            showDraw: false
+        });
+    }
 
-        /*
-        if(this.state.targetGroupID ==  null){
-            if(this.state.targetUser == false){
-                console.log("1");
-                this.state.show = true;
-            }
-            if(this.state.targetUser == null){
-                console.log("2");
-                this.state.show = false;
-            }
+    cancelDraw(value){
+        this.setState({
+            show: true,
+            showDraw: false
+        });
+    }
 
-            if(!(friends.indexOf(this.state.targetUser) > -1)){
-                this.state.targetUser = "null";
-                this.state.show = false;
-
-            }
-        }else{
-            if(!this.groupExists(this.state.targetGroupID)){
-                this.state.show = false;
-                console.log("Group Doesnt Exist Anymore");
-            }else{
-                this.state.show = true;
-                console.log("");
-            }
-
-        }
-
-        /*
-        if(this.state.targetUser == false){
-            console.log("1");
-            this.state.show = true;
-        }
-        else if(this.state.targetUser == null){
-            console.log("2");
-            this.state.show = false;
-        }else if(this.state.targetGroupID != null){
-            console.log("3");
-            console.log("Group ID not NULL")
-            if(!(this.allGroups().indexOf(this.state.targetGroupID) > -1)){
-                this.state.show = false;
-                console.log("Group Doesnt Exist Anymore");
-            }
-        }
-        else{
-            console.log("4");
-            if(!(friends.indexOf(this.state.targetUser) > -1)){
-                this.state.targetUser = "null";
-                this.state.show = false;
-
-            }
-        }
-        */
-
-
+    cancelTextEditor(){
+        this.setState({
+            show: true,
+            showTextEditor: false
+        });
     }
 
     renderPendingGroups(){
@@ -639,21 +611,10 @@ export class ChatPage extends Component{
         event.target.email.value = "";
         event.target.admin.value = "";
         this.hideEditGroup(this.state.targetGroupID);
-
-
-
-
-
-
-
-
-
-
     }
 
 
     render(){
-
         this.validateTarget();
         currentUname = this.props.match.params.uname;
         console.log("FLAG: "+ this.state.show);
@@ -731,20 +692,28 @@ export class ChatPage extends Component{
                     <div id="chatMessagesContainer">
                         <div id="chatMessagesContent">
                             <ul id="msgCSS">
-                                <Upload uname={currentUname} targetUname={this.state.targetUser}/>
+                                <Upload uname={currentUname} targetUname={this.state.targetUser} targetGroupID={this.state.targetGroupID}/>
                                 {this.renderMessages()}
-								{this.scrollToBottom()}
+                                {this.scrollToBottom()}
                             </ul>
                         </div>
                         <div id="chatMessagesBottom">
-                            <form onSubmit={this.handleMessageSubmit.bind(this)} >
+                            <form id="chatForm" onSubmit={this.handleMessageSubmit.bind(this)} >
                                 <input type="text" ref="textInput" id="chatMessagesInput" placeholder="Type message here" />
-                                <button id="customButton" >Send</button>
                             </form>
+                            <span>
+                                <button  id="customButton" onClick={this.goToDraw}>Draw</button>
+                                <button  id="customButton" onClick={this.goToTextEditor}>TextEditor</button>
+                            </span>
                         </div>
                     </div>
                 </ToggleDisplay>
-
+                <ToggleDisplay show={this.state.showDraw}>
+                    <Draw cancel={this.cancelDraw.bind(this)} uname={currentUname} targetUname={this.state.targetUser} targetGroupID={this.state.targetGroupID}/>
+                </ToggleDisplay>
+                <ToggleDisplay show={this.state.showTextEditor}>
+                    <TextEditor cancel={this.cancelTextEditor} uname={currentUname} targetUname={this.state.targetUser} targetGroupID={this.state.targetGroupID}/>
+                </ToggleDisplay>
                 <div id="chatOnlineContainer">
                     <form onSubmit={this.handleAddFriend.bind(this)}>
                         <label id="addFriends">Add Friends:</label>
