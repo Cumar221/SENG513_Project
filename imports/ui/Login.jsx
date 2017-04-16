@@ -66,70 +66,67 @@ class Login extends Component {
             }
         }
 
+    resetColors(event){
+        event.target.username.style.background = "#6e7e8b";
+        event.target.password.style.background = "#6e7e8b";
+
     }
 
+    emptyUsername(empty){
 
-        resetColors(event) {
-          event.target.username.style.background = "#6e7e8b";
-          event.target.password.style.background = "#6e7e8b";
-
-        }
-
-        emptyUsername(empty) {
-
-          if (empty) {
+        if (empty) {
             document.getElementById('emptyUsrname').style.display = 'inline';
-          }
-
-          else {
-            document.getElementById('emptyUsrname').style.display = 'none';
-          }
-
         }
 
-        emptyPassword(empty) {
+        else {
+            document.getElementById('emptyUsrname').style.display = 'none';
+        }
 
-          if (empty) {
+    }
+
+    emptyPassword(empty) {
+
+        if (empty) {
             document.getElementById('emptyPass').style.display = 'inline';
 
-          }
+        }
 
-          else {
+        else {
             document.getElementById('emptyPass').style.display = 'none';
-          }
+        }
+
+    }
+
+    resetColors(event) {
+        event.target.username.style.background = "#6e7e8b";
+        event.target.password.style.background = "#6e7e8b";
+
+    }
+
+    emptyUsername(empty) {
+
+        if (empty) {
+            document.getElementById('emptyUsrname').style.display = 'inline';
+        }
+
+        else {
+            document.getElementById('emptyUsrname').style.display = 'none';
+        }
+
+    }
+
+    emptyPassword(empty) {
+
+        if (empty) {
+            document.getElementById('emptyPass').style.display = 'inline';
 
         }
 
-            resetColors(event) {
-              event.target.username.style.background = "#6e7e8b";
-              event.target.password.style.background = "#6e7e8b";
+        else {
+            document.getElementById('emptyPass').style.display = 'none';
+        }
 
-            }
-
-            emptyUsername(empty) {
-
-              if (empty) {
-                document.getElementById('emptyUsrname').style.display = 'inline';
-              }
-
-              else {
-                document.getElementById('emptyUsrname').style.display = 'none';
-              }
-
-            }
-
-            emptyPassword(empty) {
-
-              if (empty) {
-                document.getElementById('emptyPass').style.display = 'inline';
-
-              }
-
-              else {
-                document.getElementById('emptyPass').style.display = 'none';
-              }
-
-            }
+    }
 
 
     render() {
@@ -137,9 +134,9 @@ class Login extends Component {
             <div className="Main">
                 <form onSubmit= {this.handleSubmit.bind(this)}>
                     <div className="userField">
-                      <div id="invalidLogin">
-                        <p>Incorrect username or password!</p>
-                      </div>
+                        <div id="invalidLogin">
+                            <p>Incorrect username or password!</p>
+                        </div>
                         Username: <input id="uname" name="username" type="text" placeholder="example@example.com"/>
                         <div id="emptyUsrname">
                             <p>Please enter a username</p>
@@ -148,8 +145,8 @@ class Login extends Component {
                         <br></br>
                         Password: <input id="pass" name="password" type="password" placeholder="***********"/>
                         <div id="emptyPass">
-                              <p>Please enter a password</p>
-                          </div>
+                            <p>Please enter a password</p>
+                        </div>
                         <br></br>
 
                     </div>
@@ -173,6 +170,11 @@ class Login extends Component {
 
     }
 }
+
+
+
+
+
 
 Login.propTypes = {
     allUsers: PropTypes.array.isRequired,

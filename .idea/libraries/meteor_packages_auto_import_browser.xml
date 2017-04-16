@@ -202,6 +202,7 @@
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/doc_editor/docViewer.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/doc_insert/docInsert.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/cfs_collection/0.5.5/web.browser/packages/cfs_collection.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/chipcastledotcom_meteor-jspdf/0.0.8/web.browser/packages/chipcastledotcom_meteor-jspdf.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.8/web.browser/random_stream.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.8/web.browser/method_invocation.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/row_header/header.js" />
@@ -211,6 +212,7 @@
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/cfs_collection-filters/0.2.4/web.browser/packages/cfs_collection-filters.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.8/web.browser/heartbeat.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/row_account/accountViewer.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/chipcastledotcom_jspdf/0.0.2/web.browser/packages/chipcastledotcom_jspdf.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/doc_controls/docControls.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/cfs_data-man/0.0.6/web.browser/packages/cfs_data-man.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/row_collection/collections.js" />
@@ -489,6 +491,7 @@
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/doc_editor/docViewer.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/doc_insert/docInsert.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/cfs_collection/0.5.5/web.browser/packages/cfs_collection.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/chipcastledotcom_meteor-jspdf/0.0.8/web.browser/packages/chipcastledotcom_meteor-jspdf.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.8/web.browser/random_stream.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.8/web.browser/method_invocation.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/row_header/header.js" />
@@ -498,6 +501,7 @@
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/cfs_collection-filters/0.2.4/web.browser/packages/cfs_collection-filters.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.8/web.browser/heartbeat.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/row_account/accountViewer.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/chipcastledotcom_jspdf/0.0.2/web.browser/packages/chipcastledotcom_jspdf.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/doc_controls/docControls.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/cfs_data-man/0.0.6/web.browser/packages/cfs_data-man.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/msavin_mongol/2.0.1/web.browser/client/row_collection/collections.js" />
