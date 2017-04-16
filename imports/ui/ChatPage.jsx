@@ -620,7 +620,7 @@ export class ChatPage extends Component{
             let temp2 = [];
             for(i = 0; i<temp.length; i++){
 
-                if(!this.userExists(temp[i])){
+                if(!this.memberExists(temp[i])){ //
                     temp2.push(temp[i]);
                 }
             }///
