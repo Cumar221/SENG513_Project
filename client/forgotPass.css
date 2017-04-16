@@ -1,0 +1,166 @@
+/* CSS declarations go here */
+body {
+    background-color:#566771 !important;
+    font-family: sans-serif;
+    background-attachment: fixed;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.container{
+    background-color:#566771 ;
+    min-width: 100%;
+    min-height: 200%;
+}
+.Main {
+    background: #566771;
+    color: #90a6b8;
+    font-size: large;
+    width: 34%;
+    padding-top: 10%;
+    margin: 0 auto;
+    min-height: 100%;
+
+}
+.userField{
+    background: #566771;
+    float: left;
+    text-align: right;
+    padding-left: 20%;
+
+}
+.resetButton{
+    padding-top: 15%;
+    text-align: center;
+
+}
+
+#reset:hover {
+	background-color: #4aa8e2; 
+}
+
+#uname{
+    border: hidden;
+    color: black;
+    background: #6e7e8b;
+
+}
+#pass{
+    border: hidden;
+    background: #6e7e8b;
+    color: black;
+}
+#reset{
+    width: 190px;
+    height: 40px;
+    background: #328dc6;
+    border: hidden;
+    color: black;
+	transition: .3s;
+}
+
+
+
+
+.registrationField {
+    background: #566771;
+    float: left;
+    text-align: right;
+	
+
+
+}
+.register{
+    margin-top: 5%;
+    padding-right: 10%;
+	position: relative;
+}
+
+.UItem1, .UItem2, .UItem3, .UItem4, .UItem5 {
+    padding: 10px;
+}
+
+input::-webkit-input-placeholder{
+    color:#999999;
+}
+input:-moz-placeholder {
+    color:#999999;
+}
+#error{
+    color: #d00013;
+}
+
+/*Back button in account*/
+
+
+#backButton:hover {
+	background-color: #4aa8e2;
+}
+
+#backButton{
+		width: 70px;
+		height: 40px;
+		background: #328dc6;
+		border: hidden;
+		color: black;
+		position: absolute;
+		left: -10px;
+		top: -50px;
+		transition: .3s;
+}
+
+/*Reset Password Page*/
+
+.wrapper *{ box-sizing: border-box; }
+        .wrapper .Main {
+            text-align: center;
+            width: 50%;
+            margin: 0 auto;
+            padding-top: 100px;
+            min-width: 434px;
+        }
+        .wrapper .userField {
+            padding: 0;
+            float: none;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 380px;
+            width: 100%;
+            position: relative;
+            left: -40px;
+        }
+        .wrapper .userField p {
+            overflow: hidden;
+            text-align: right;
+        }
+        .wrapper .userField p label { 
+        }
+        .wrapper .userField p input {
+            padding: 5px;
+        }
+        .wrapper .userField h3 {
+            text-align: right;
+        }
+        .wrapper .resetButton {
+            margin-top: 30px;
+            padding: 0;
+            margin-bottom: 40px;
+        }
+        .wrapper input[type=submit] {
+            cursor: pointer;
+        }
+
+        @media all and (max-width: 460px) {
+            .wrapper .userField label { display: block; }
+            .wrapper .userField p { text-align: left; }
+            .wrapper .userField h3 { text-align: left; }
+            .wrapper .Main { width: 100%; text-align: left; min-width: auto; padding-left: 20px; padding-right: 20px;}
+            .wrapper .resetButton { text-align: left; }
+            .wrapper .userField { width: 100%; position: static; max-width: 100%;}
+        }

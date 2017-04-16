@@ -40,14 +40,14 @@ class Login extends Component {
             console.log("Authentication: "+ verify);
 
             if(verify == true) {
-                this.props.history.push({pathname:'/chatPage',
+                this.props.history.push({pathname:'/chatPage/'+uname,
                                          state:{currentUID: uname}});
             }
+
             else {
               //Unveil error message
               document.getElementById('invalidLogin').style.display = 'inline';
             }
-
 
         }
         else{
@@ -66,58 +66,90 @@ class Login extends Component {
             }
         }
 
-
-
     }
 
-    resetColors(event) {
-      event.target.username.style.background = "#6e7e8b";
-      event.target.password.style.background = "#6e7e8b";
 
-    }
+        resetColors(event) {
+          event.target.username.style.background = "#6e7e8b";
+          event.target.password.style.background = "#6e7e8b";
 
-    emptyUsername(empty) {
+        }
 
-      if (empty) {
-        document.getElementById('emptyUsrname').style.display = 'inline';
-      }
+        emptyUsername(empty) {
 
-      else {
-        document.getElementById('emptyUsrname').style.display = 'none';
-      }
+          if (empty) {
+            document.getElementById('emptyUsrname').style.display = 'inline';
+          }
 
-    }
+          else {
+            document.getElementById('emptyUsrname').style.display = 'none';
+          }
 
-    emptyPassword(empty) {
+        }
 
-      if (empty) {
-        document.getElementById('emptyPass').style.display = 'inline';
+        emptyPassword(empty) {
 
-      }
+          if (empty) {
+            document.getElementById('emptyPass').style.display = 'inline';
 
-      else {
-        document.getElementById('emptyPass').style.display = 'none';
-      }
+          }
 
-    }
+          else {
+            document.getElementById('emptyPass').style.display = 'none';
+          }
+
+        }
+
+            resetColors(event) {
+              event.target.username.style.background = "#6e7e8b";
+              event.target.password.style.background = "#6e7e8b";
+
+            }
+
+            emptyUsername(empty) {
+
+              if (empty) {
+                document.getElementById('emptyUsrname').style.display = 'inline';
+              }
+
+              else {
+                document.getElementById('emptyUsrname').style.display = 'none';
+              }
+
+            }
+
+            emptyPassword(empty) {
+
+              if (empty) {
+                document.getElementById('emptyPass').style.display = 'inline';
+
+              }
+
+              else {
+                document.getElementById('emptyPass').style.display = 'none';
+              }
+
+            }
+
+
     render() {
         return(
             <div className="Main">
                 <form onSubmit= {this.handleSubmit.bind(this)}>
                     <div className="userField">
-                        <div id="invalidLogin">
-                          <p>Incorrect username or password!</p>
-                        </div>
-                        Username: <input id="uname" name="username" type="text" placeholder="example@example.com"/>
-                      <div id="emptyUsrname">
-                          <p>Please enter a username</p>
+                      <div id="invalidLogin">
+                        <p>Incorrect username or password!</p>
                       </div>
+                        Username: <input id="uname" name="username" type="text" placeholder="example@example.com"/>
+                        <div id="emptyUsrname">
+                            <p>Please enter a username</p>
+                        </div>
                         <br></br>
                         <br></br>
                         Password: <input id="pass" name="password" type="password" placeholder="***********"/>
-                      <div id="emptyPass">
-                            <p>Please enter a password</p>
-                        </div>
+                        <div id="emptyPass">
+                              <p>Please enter a password</p>
+                          </div>
                         <br></br>
 
                     </div>

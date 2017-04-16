@@ -41,26 +41,23 @@ class Account extends Component {
         }
 
         if(password.length == 0){
-            console.log("You must enter a password");
+            console.log("You must enter passwors");
             event.target.pass1.style.background = "#800000";
             flag = false;
             this.showErrorMsg(currPassMsg);
 
-        }
-
-        else{ // password not empty
+        }else{ // password not empty
             event.target.pass1.style.background = "#6e7e8b";
             // need to check for password authentication
             if(this.authenticateUser(currentUname, password)){
                 console.log("User Authenticated");
-                this.hideErrorMsg(currPassMsg);
                 // user is authenticated
                 event.target.pass1.style.background = "#00b300";
-                if(newUname.length > 0) {
+                if(newUname.length >0){
                   this.noChangesMessage(false);
                     console.log("TEST");
                     if(this.validUsername(newUname)){
-                        this.hideErrorMsg(newUnameMsg);
+                      this.hideErrorMsg(newUnameMsg);
                         event.target.username.style.background = "#00b300";
                         Meteor.call("updateUsername", this.allUsers()[this.getUnameIndex(currentUname)]._id, newUname );
                         console.log("Username Changed");
@@ -93,7 +90,7 @@ class Account extends Component {
 
                 if(newPass1.length > 0 || newPass2.length > 0){
 
-                  this.noChangesMessage(false);
+                    this.noChangesMessage(false);
 
                     if(newPass1 === newPass2){
                         this.hideErrorMsg(newPassMsg);
@@ -116,8 +113,7 @@ class Account extends Component {
                           event.target.pass3.style.background = "#00b300";
                           Meteor.call("updatePassword", this.allUsers()[this.getUnameIndex(currentUname)]._id, newPass1 );
                           console.log("Password Changed");
-                        }
-
+                      }
                     }else{
                         this.newPassword(false);
                         this.showErrorMsg(newPassMsg);
@@ -144,12 +140,12 @@ class Account extends Component {
                 flag = false;
             }
         }
-
         if(flag){
             if(newUname.length == 0){
                 newUname = this.props.match.params.value;
             }
-            this.props.history.push({pathname:'/chatPage',
+            console.log();
+            this.props.history.push({pathname:'/chatPage/'+newUname,
                 state:{currentUID: newUname}});
         }
 
@@ -221,89 +217,92 @@ class Account extends Component {
         return email;
     }
 
+	handleBack(){
+		console.log("back");
+		window.history.back();
+	}
 
-    hideErrorMsg(field) {
-      /*
-      *Hides error messages based on textbox field
-      */
-      let pass = 0;
-      let usernameChange = 1;
-      let emailChange = 2;
+  hideErrorMsg(field) {
+    /*
+    *Hides error messages based on textbox field
+    */
+    let pass = 0;
+    let usernameChange = 1;
+    let emailChange = 2;
 
-      if (field === pass) {
-          document.getElementById('incorrectPassword').style.display = 'none';
-      }
-
-      else if (field === usernameChange) {
-        document.getElementById('incorrectUsername').style.display = 'none';
-
-      }
-
-      else if (field === emailChange) {
-        document.getElementById('incorrectEmail').style.display = 'none';
-
-      }
-
-      else {
-        document.getElementById('nonMatch').style.display = 'none';
-
-      }
+    if (field === pass) {
+        document.getElementById('incorrectPassword').style.display = 'none';
     }
 
-    showErrorMsg(field) {
-      /*
-      *Displays error messages based on textbox field
-      */
+    else if (field === usernameChange) {
+      document.getElementById('incorrectUsername').style.display = 'none';
 
-      let incorrectPass = 0;
-      let incorrectUsrname = 1;
-      let incorrectEm = 2;
-
-      if (field === incorrectPass){
-        document.getElementById('incorrectPassword').style.display = 'inline';
-      }
-
-      else if (field === incorrectUsrname) {
-        document.getElementById('incorrectUsername').style.display = 'inline';
-
-      }
-
-      else if (field === incorrectEm) {
-        document.getElementById('incorrectEmail').style.display = 'inline';
-
-      }
-
-      else {
-        document.getElementById('nonMatch').style.display = 'inline';
-
-      }
     }
 
-    noChangesMessage(emptyFields) {
-      if (emptyFields) {
-        document.getElementById('noChanges').style.display = 'inline';
-      }
+    else if (field === emailChange) {
+      document.getElementById('incorrectEmail').style.display = 'none';
 
-      else {
-        document.getElementById('noChanges').style.display = 'none';
-
-      }
     }
 
-    newPassword(matchesOld) {
+    else {
+      document.getElementById('nonMatch').style.display = 'none';
 
-      if (matchesOld) {
-        document.getElementById('matchesOldPass').style.display = 'inline';
-
-      }
-
-      else {
-        document.getElementById('matchesOldPass').style.display = 'none';
-      }
     }
+  }
+
+  showErrorMsg(field) {
+    /*
+    *Displays error messages based on textbox field
+    */
+
+    let incorrectPass = 0;
+    let incorrectUsrname = 1;
+    let incorrectEm = 2;
+
+    if (field === incorrectPass){
+      document.getElementById('incorrectPassword').style.display = 'inline';
+    }
+
+    else if (field === incorrectUsrname) {
+      document.getElementById('incorrectUsername').style.display = 'inline';
+
+    }
+
+    else if (field === incorrectEm) {
+      document.getElementById('incorrectEmail').style.display = 'inline';
+
+    }
+
+    else {
+      document.getElementById('nonMatch').style.display = 'inline';
+
+    }
+  }
+
+  noChangesMessage(emptyFields) {
+    if (emptyFields) {
+      document.getElementById('noChanges').style.display = 'inline';
+    }
+
+    else {
+      document.getElementById('noChanges').style.display = 'none';
+
+    }
+  }
+
+  newPassword(matchesOld) {
+
+    if (matchesOld) {
+      document.getElementById('matchesOldPass').style.display = 'inline';
+
+    }
+
+    else {
+      document.getElementById('matchesOldPass').style.display = 'none';
+    }
+  }
 
     render() {
-
         return(
 
             <div className="Main">
@@ -320,33 +319,33 @@ class Account extends Component {
 
                                 <div className="UItem3">
                                     Password: <input id="uname" name="pass1" type="password" placeholder="*************"/>
-                                  <div id="incorrectPassword">
-                                    <p>Please enter a correct password</p>
-                                  </div>
+                                    <div id="incorrectPassword">
+                                      <p>Please enter a correct password</p>
+                                    </div>
                                 </div>
                                 <div className="UItem1">
                                     New Username: <input id="uname" name="username" type="text" placeholder="example"/>
-                                  <div id="incorrectUsername">
-                                      <p>Cannot use this username</p>
-                                    </div>
+                                    <div id="incorrectUsername">
+                                        <p>Cannot use this username</p>
+                                      </div>
                                 </div>
                                 <div className="UItem2">
                                     New Email: <input id="uname" name="email" type="text" placeholder="example@example.com"/>
-                                  <div id="incorrectEmail">
-                                      <p>Cannot use this email</p>
-                                    </div>
+                                    <div id="incorrectEmail">
+                                        <p>Cannot use this email</p>
+                                      </div>
                                 </div>
                                 <div className="UItem3">
                                     New Password: <input id="uname" name="pass2" type="password" placeholder="*************"/>
                                 </div>
                                 <div className="UItem4">
                                     Re-enter password: <input id="uname" name="pass3" type="password" placeholder="*************"/>
-                                  <div id="nonMatch">
-                                      <p>The passwords you have entered do not match</p>
-                                    </div>
-                                    <div id="matchesOldPass">
-                                        <p>New password matches current one!</p>
+                                    <div id="nonMatch">
+                                        <p>The passwords you have entered do not match</p>
                                       </div>
+                                      <div id="matchesOldPass">
+                                          <p>New password matches current one!</p>
+                                        </div>
                                 </div>
                                 <div className="register">
                                     <br></br> <input type="submit" value="Save Changes" id="register"/>
@@ -356,6 +355,11 @@ class Account extends Component {
                                 </div>
                             </div>
                         </form>
+						<form onSubmit={this.handleBack.bind(this)}>
+							  <div className="register">
+                                    <br></br> <input type="submit" value="back" id="backButton"/>
+                                </div>
+		                </form>
                     </div>
             </div>
 

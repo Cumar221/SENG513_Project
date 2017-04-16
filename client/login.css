@@ -39,7 +39,6 @@ body {
     padding-top: 15%;
     text-align: center;
 
-
 }
 
 .usernameEmail{
@@ -71,12 +70,22 @@ body {
     background: #6e7e8b;
     color: black;
 }
+
+#register:hover {
+	background-color: #4aa8e2;
+}
+
+#login:hover {
+	background-color: #4aa8e2;
+}
+
 #login, #register{
     width: 190px;
     height: 40px;
     background: #328dc6;
     border: hidden;
     color: black;
+	transition: .3s;
 }
 
 #incorrectPassword, #incorrectEmail, #incorrectUsername, #nonMatch, #noChanges, #matchesOldPass {
