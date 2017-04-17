@@ -33,12 +33,7 @@ export default class UploadImages extends Component{
         xhr.send(data);
         const fileResponse = JSON.parse(xhr.responseText);
 
-        if(this.props.targetGroupID != null && this.props.targetUname == null){ // group chat
-            Meteor.call('addGroupMessage',{file: fileResponse.secure_url, uname: this.props.uname, targetUname: this.props.targetUname,  targetGroupID: this.props.targetGroupID});
-        }
-        else if(this.props.targetGroupID == null && this.props.targetUname != null){// PM
-            Meteor.call('addPrivateMessage',{file: fileResponse.secure_url, uname: this.props.uname, targetUname: this.props.targetUname});
-        }
+        Meteor.call('addPrivateMessage',{file: fileResponse.secure_url, uname: this.props.uname, targetUname: this.props.targetUname});
     }
 
     render(){
@@ -56,3 +51,4 @@ export default class UploadImages extends Component{
         )
     }
 }
+

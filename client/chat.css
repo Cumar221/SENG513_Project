@@ -93,11 +93,6 @@ body {
     overflow: auto;
 }
 
-#chatForm{
-    position: absolute;
-    width: inherit;
-}
-
 .Dropzone{
     position: absolute !important;
     height: 91% !important;

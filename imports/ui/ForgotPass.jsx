@@ -59,10 +59,10 @@ class ForgotPass extends Component {
 			  <div className="Main">
 				<form onSubmit= {this.handleSubmit.bind(this)}>
 					<div className="userField">
-						<p><label htmlFor="uname">Username:</label> <input id="uname" name="username" type="text" placeholder=""/></p>
+						<p><label htmlFor="uname">Username:</label> <input id="uname" name="username" type="text" placeholder="example"/></p>
 						<h3>What city were you born in?</h3>
-						<p><label htmlFor="pass">Answer:</label> <input id="pass" name="secret" type="password" placeholder=""/></p>
-						<p><label htmlFor="">New Password:</label> <input id="pass" name="newPassword" type="password" placeholder=""/></p>
+						<p><label htmlFor="pass">Answer:</label> <input id="pass" name="secret" type="password" placeholder="***********"/></p>
+						<p><label htmlFor="newpass">New Password:</label> <input id="pass" name="newPassword" type="password" placeholder="***********"/></p>
 					</div>
 
 					<div className="resetButton">
@@ -77,6 +77,7 @@ class ForgotPass extends Component {
 					
 				</div>
 			</div>
+
 
         );
     }
