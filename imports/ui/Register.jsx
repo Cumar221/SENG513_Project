@@ -171,6 +171,9 @@ class Register extends Component {
     render() {
         return(
             <div className="Register">
+              <div id="registration">
+                <h1>Registration.</h1>
+              </div>
                 <div className="fieldContainer">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <div className="registrationField">
