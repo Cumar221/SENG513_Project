@@ -170,9 +170,9 @@ class Register extends Component {
 
     render() {
         return(
-            <div className="Register">
-                         
-					<form onSubmit={this.handleSubmit.bind(this)}>
+            <div className="Main">
+                <div className="fieldContainer">
+                    <form onSubmit={this.handleSubmit.bind(this)}>
                         <div className="registrationField">
                             <div className="UItem1">
                                 Username: <input id="uname" name="username" type="text" placeholder="example"/>
@@ -221,7 +221,7 @@ class Register extends Component {
                             </div>
                         </div>
                     </form>
-     
+                </div>
 
             </div>
             );
