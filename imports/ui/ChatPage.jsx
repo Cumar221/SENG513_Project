@@ -659,7 +659,7 @@ export class ChatPage extends Component{
                     </Collapsible>
                 </div>
                 <ToggleDisplay show={this.state.showCreateGroup}>
-                    <div className="Main">
+                    <div className="GroupChat">
                         <div className="fieldContainer">
                             <form onSubmit={this.handleSubmit.bind(this)}>
                                 <div className="registrationField">
@@ -681,7 +681,7 @@ export class ChatPage extends Component{
                     </div>
                 </ToggleDisplay>
                 <ToggleDisplay show={this.state.showEditGroup}>
-                    <div className="Main">
+                    <div className="GroupSettings">
                         <div className="fieldContainer">
                             <form onSubmit={this.handleGroupChange.bind(this)}>
                                 <div className="registrationField">
