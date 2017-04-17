@@ -125,6 +125,7 @@ body {
     margin-top: 5%;
     padding-right: 10%;
 	position: relative;
+	left: -75px!important;
 }
 
 .UItem1, .UItem2, .UItem3, .UItem4, .UItem5 {
