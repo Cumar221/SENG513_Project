@@ -131,6 +131,12 @@ class Login extends Component {
     render() {
         return(
             <div className="Main">
+            <div id="title">
+              <h1>Welcome to Slingshot Messenger.</h1>
+            </div>
+            <div id="logo">
+              <img src="/images/logo.jpg"/>
+            </div>
                 <form onSubmit= {this.handleSubmit.bind(this)}>
                     <div className="userField">
                         <div id="invalidLogin">
