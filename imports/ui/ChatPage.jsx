@@ -530,7 +530,8 @@ export class ChatPage extends Component{
             showDraw: true,
             show: false,
             showCreateGroup: false,
-            showTextEditor: false
+            showTextEditor: false,
+
         });
     }
 
