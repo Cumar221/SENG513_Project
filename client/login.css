@@ -42,6 +42,19 @@ body {
     user-input: false;
 }
 
+#title {
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+#registration {
+  padding-bottom: 10%;
+  text-align: left;
+}
+#logo {
+  padding-bottom: 20px;
+  padding-left: 26%;
+}
 #uname{
     border: hidden;
     color: black;

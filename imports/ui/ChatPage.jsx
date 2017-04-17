@@ -284,7 +284,7 @@ export class ChatPage extends Component{
     }
 
     renderMessages() { // NO PM
-
+        this.scrollToBottom();
 
         if(this.state.targetGroupID != null && this.state.targetUser == null){  // GROUP CHAT
 
@@ -590,6 +590,7 @@ export class ChatPage extends Component{
     }
 
 	scrollToBottom(){
+        console.log("SCROLLING");
 		setTimeout(function(){
 			var elem = document.getElementById('chatMessagesContent');
 			elem.scrollTop = elem.scrollHeight ;
@@ -648,6 +649,7 @@ export class ChatPage extends Component{
 
     render(){
         this.validateTarget();
+
         currentUname = this.props.match.params.uname;
         console.log("FLAG: "+ this.state.show);
         return(
@@ -775,6 +777,7 @@ export class ChatPage extends Component{
                 </footer>
             </div>
         )
+        this.scrollToBottom();
     }
 }
 
