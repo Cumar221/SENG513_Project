@@ -95,7 +95,7 @@ body {
 
 #chatForm{
     position: absolute;
-    width: inherit;
+    width: 70%;
 }
 
 .Dropzone{

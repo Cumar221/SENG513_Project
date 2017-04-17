@@ -477,7 +477,10 @@ export class ChatPage extends Component{
 
         console.log("VALID: "+ this.state.showCreateGroup);
         let val = this.state.showCreateGroup;
-        if(this.state.targetGroupID == null && this.state.targetUser != null){ // PM only
+
+        if(this.state.showDraw == true || this.state.showTextEditor == true){
+            this.state.show = false;
+        }else if(this.state.targetGroupID == null && this.state.targetUser != null){ // PM only
 
             this.state.show = true;
             this.state.showGroupMembers = false;
@@ -486,7 +489,6 @@ export class ChatPage extends Component{
             if(!(friends.indexOf(this.state.targetUser) > -1)){
                 this.state.targetUser = null;
                 this.state.show = false;
-
             }
         }else if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat   only
             if(!this.state.show){
@@ -513,9 +515,9 @@ export class ChatPage extends Component{
             }
 
         }else if(this.state.targetGroupID == null && this.state.targetUser == null){ // no     PM or Group Chat
-        this.state.showGroupMembers = false;
-        this.state.show = false;
-        this.state.showEditGroup = false;
+            this.state.showGroupMembers = false;
+            this.state.show = false;
+            this.state.showEditGroup = false;
         }
 
         if(val){
@@ -529,8 +531,6 @@ export class ChatPage extends Component{
         this.setState({
             showDraw: true,
             show: false,
-            showCreateGroup: false,
-            showTextEditor: false
         });
     }
 
@@ -538,8 +538,6 @@ export class ChatPage extends Component{
         this.setState({
             showTextEditor: true,
             show: false,
-            showCreateGroup: false,
-            showDraw: false
         });
     }
 
