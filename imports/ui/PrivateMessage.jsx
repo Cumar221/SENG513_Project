@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import dateFormat from 'dateformat';
+import {emojify} from 'react-emojione';
+
 
 export default class PrivateMessage extends Component {
     render() {
@@ -43,7 +45,7 @@ export default class PrivateMessage extends Component {
             }
 
             return (
-                <li style={messageStyle}>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] {username}: <br/> {text}</li>
+                <li style={messageStyle}>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] {username}: <br/> {emojify(text)}</li>
             );
         }else{
             return null;

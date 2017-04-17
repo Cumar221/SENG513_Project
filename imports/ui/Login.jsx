@@ -58,7 +58,7 @@ class Login extends Component {
           this.emptyUsername(true);
         }
     }
-  
+
     resetColors(event){
         event.target.username.style.background = "#6e7e8b";
         event.target.password.style.background = "#6e7e8b";

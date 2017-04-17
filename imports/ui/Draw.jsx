@@ -17,6 +17,10 @@ const modalStyle = {
     top: 0, bottom: 0, left: 0, right: 0
 };
 
+const test ={
+    verticalAlign: 'middle'
+}
+
 const backdropStyle = {
     ...modalStyle,
     zIndex: 'auto',
@@ -153,6 +157,7 @@ export default class Draw extends Component{
                     fillColor={this.state.fillWithColor ? this.state.fillColor : 'transparent'}
                     backgroundColor={this.state.fillWithBackgroundColor ? this.state.backgroundColor : 'transparent'}
                     width="100%"
+                    style={test}
                     height='95%'
                     tool={this.state.tool}
                 />
