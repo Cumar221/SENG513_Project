@@ -36,7 +36,7 @@ export class ChatPage extends Component{
         }
       
         currentUname = this.props.match.params.uname;
-        this.state={show: bool, showCreateGroup: false, targetUser: "null" ,  showEditGroup: false, showGroupMembers: false, targetGroupID: null, showDraw: false, changeGroup: null , showTextEditor: false};
+        this.state={show: bool, showCreateGroup: false, targetUser: "null" ,  showEditGroup: false, showGroupMembers: false, targetGroupID: null, showDraw: true, changeGroup: null , showTextEditor: false};
         this.cancelDraw       = this.cancelDraw.bind(this);
         this.cancelTextEditor = this.cancelTextEditor.bind(this);
         this.goToDraw         = this.goToDraw.bind(this);
@@ -480,6 +480,7 @@ export class ChatPage extends Component{
 
         if(this.state.showDraw == true || this.state.showTextEditor == true){
             this.state.show = false;
+
         }else if(this.state.targetGroupID == null && this.state.targetUser != null){ // PM only
 
             this.state.show = true;
@@ -490,6 +491,7 @@ export class ChatPage extends Component{
                 this.state.targetUser = null;
                 this.state.show = false;
             }
+
         }else if(this.state.targetGroupID != null && this.state.targetUser == null){ // group chat   only
             if(!this.state.show){
                 this.state.showEditGroup = true;
@@ -707,7 +709,7 @@ export class ChatPage extends Component{
                     </div>
                 </ToggleDisplay>
                 <ToggleDisplay show={this.state.showDraw}>
-                    <Draw cancel={this.cancelDraw.bind(this)} uname={currentUname} targetUname={this.state.targetUser} targetGroupID={this.state.targetGroupID}/>
+                    <Draw cancel={this.cancelDraw} uname={currentUname} targetUname={this.state.targetUser} targetGroupID={this.state.targetGroupID}/>
                 </ToggleDisplay>
                 <ToggleDisplay show={this.state.showTextEditor}>
                     <TextEditor cancel={this.cancelTextEditor} uname={currentUname} targetUname={this.state.targetUser} targetGroupID={this.state.targetGroupID}/>
@@ -730,6 +732,7 @@ export class ChatPage extends Component{
                             </ul>
                         </Collapsible>
                     </ToggleDisplay>
+                    {this.state.showDraw = false}
 
                 </div>
                 <footer>
