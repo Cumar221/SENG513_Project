@@ -48,9 +48,15 @@ export default class GroupMessage extends Component {
                 }
             }
 
-            return (
-                <li style={messageStyle}>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] {username}: <br/> {emojify(text)}</li>
-            );
+            if(text != null || text != undefined) {
+                return (
+                    <li style={messageStyle}>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] {username}:
+                        <br/> {emojify(text)}</li>
+                );
+            }
+
+            return null;
+
         }else{
             return null;
         }

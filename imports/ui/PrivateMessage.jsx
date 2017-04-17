@@ -12,6 +12,8 @@ export default class PrivateMessage extends Component {
         let targetUser = this.props.message.targetUname;
         var messageStyle;
 
+        console.log(text);
+
         if((this.props.uname === username && this.props.targetUname === targetUser) ||(this.props.uname === targetUser && this.props.targetUname === username) ){
             if(username === this.props.uname){
                 messageStyle = {
@@ -44,9 +46,15 @@ export default class PrivateMessage extends Component {
                 }
             }
 
-            return (
-                <li style={messageStyle}>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] {username}: <br/> {emojify(text)}</li>
-            );
+            if(text != null || text != undefined) {
+                return (
+                    <li style={messageStyle}>[{dateFormat(time, "dddd, mmmm dS, yyyy, h:MM:ss TT")}] {username}:
+                        <br/> {emojify(text)}</li>
+                );
+            }
+
+            return null;
+
         }else{
             return null;
         }
