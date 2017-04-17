@@ -21,7 +21,7 @@ import GroupUsers from "./GroupUsers.jsx";
 import {GroupMessages} from "../api/groupMessages.js";
 import Draw from './Draw.jsx';
 import TextEditor from './TextEditor.jsx';
-
+import geolocation from 'geolocation';
 let currentUname = "";
 let control = true;
 
@@ -42,6 +42,7 @@ export class ChatPage extends Component{
         this.goToDraw         = this.goToDraw.bind(this);
         this.goToTextEditor   = this.goToTextEditor.bind(this);
         this.onUnload         = this.onUnload.bind(this);
+        this.sendGeoLocation  = this.sendGeoLocation.bind(this);
     }
 
     privateMessages(){
@@ -551,6 +552,23 @@ export class ChatPage extends Component{
         });
     }
 
+    sendGeoLocation(){
+        var targetUser = this.state.targetUser;
+        var targetGroupID = this.state.targetGroupID;
+        geolocation.getCurrentPosition(function (err, position) {
+            if (err) throw err
+            let text = position.coords.latitude + "," + position.coords.longitude;
+           // var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false&key=AIzaSyAiX1it0sfKz_5yIPO2PLMifA7PvkUcbNI";
+
+            if(targetGroupID != null && targetUser == null){ // group chat
+                Meteor.call('addGroupMessage',{text: text, uname: currentUname, targetUname: targetUser, targetGroupID: targetGroupID});
+
+            }
+            else if(targetGroupID == null && targetUser != null){// PM
+                Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: targetUser});            }
+        });
+    }
+
     cancelDraw(value){
         this.setState({
             show: true,
@@ -718,6 +736,7 @@ export class ChatPage extends Component{
                             <span>
                                 <button  id="customButton" onClick={this.goToDraw}>Draw</button>
                                 <button  id="customButton" onClick={this.goToTextEditor}>TextEditor</button>
+                                <button  id="customButton" onClick={this.sendGeoLocation}>FindME</button>
                             </span>
                         </div>
                     </div>

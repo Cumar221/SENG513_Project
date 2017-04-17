@@ -14,6 +14,7 @@
     "file-saver": "^1.3.3",
     "form-data": "^2.1.4",
     "formdata": "^0.10.4",
+    "geolocation": "^0.2.0",
     "html-pdf": "^2.1.0",
     "meteor-node-stubs": "^0.2.6",
     "react": "^15.5.4",
