@@ -34,7 +34,7 @@ export class ChatPage extends Component{
         if(this.props.match.params.value === "true"){
             bool = true;
         }
-      
+
         currentUname = this.props.match.params.uname;
         this.state={show: bool, showCreateGroup: false, targetUser: "null" ,  showEditGroup: false, showGroupMembers: false, targetGroupID: null, showDraw: true, changeGroup: null , showTextEditor: false};
         this.cancelDraw       = this.cancelDraw.bind(this);
@@ -187,7 +187,7 @@ export class ChatPage extends Component{
             if(text.length > 0){
                 Meteor.call('addPrivateMessage',{text: text, uname: currentUname, targetUname: this.state.targetUser});
             }
-            this.scrollToBottom();	
+            this.scrollToBottom();
         }
         // Clear form
         ReactDOM.findDOMNode(this.refs.textInput).value = '';
@@ -562,7 +562,7 @@ export class ChatPage extends Component{
             <PendingGroups key={groupName._id} groupName={groupName} uname = {currentUname}/>
         ));
     }
-	
+
 	scrollToBottom(){
 		setTimeout(function(){
 			var elem = document.getElementById('chatMessagesContent');
