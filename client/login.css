@@ -92,6 +92,7 @@ body {
   display: none;
   color: #800000;
   float: right;
+  position: absolute;
   padding-left: 5px;
 }
 

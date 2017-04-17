@@ -156,7 +156,7 @@ input:-moz-placeholder {
 		border: hidden;
 		color: black;
 		position: absolute;
-		left: 15px;
+		left: 90px!important;
 		top: -50px;
 		transition: .3s;
 }

@@ -425,7 +425,7 @@ class Account extends Component {
 
     render() {
         return(
-            <div className="Main">
+            <div className="Account">
                 <div className="fieldContainer">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                             <div className="registrationField">
