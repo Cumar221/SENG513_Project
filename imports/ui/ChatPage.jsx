@@ -751,7 +751,7 @@ ChatPage.propTypes = {
     groupMessages : PropTypes.array.isRequired,
 };
 
-export default createContainer(() => {//
+export default createContainer(() => {
     return {
         messages: Messages.find({}).fetch(),
         onlineUsers: OnlineUsers.find({}).fetch(),
