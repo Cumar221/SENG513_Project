@@ -61,7 +61,7 @@ export class ChatPage extends Component{
     }
 
     onUnload(event) {
-        //this.removeOnlineUser(currentUname);
+        this.removeOnlineUser(currentUname);
         this.state.showCreateGroup = false;
     }
 
@@ -142,21 +142,29 @@ export class ChatPage extends Component{
                 if(valid){
 
                     let temp = [];
-
+                    let flag = true;
                     for(i = 0; i<emails.length; i++){
                         if(emails[i] !== currentUname){
                             temp.push(emails[i]);
+                        }else{
+                            flag = false;
+                            break;
                         }
                     }
 
                     emails = temp; //
+                    if(flag){
+                        Meteor.call("newGroup", groupName, emails, admins, currentUname);
+                        event.target.groupName.value = "";
+                        event.target.email.value = "";
+                        event.target.admin.value = "";
+                        this.setState({showCreateGroup: false});
+                    }else{
+                        event.target.email.style.background = "#800000";
+                    }
 
-                    Meteor.call("newGroup", groupName, emails, admins, currentUname);
 
-                    event.target.groupName.value = "";
-                    event.target.email.value = "";
-                    event.target.admin.value = "";
-                    this.setState({showCreateGroup: false});
+
                 }else{
                     event.target.groupName.style.background = "#800000";
                 }
@@ -590,14 +598,20 @@ export class ChatPage extends Component{
             let oldInvited = this.getGroupInvited(this.state.targetGroupID);
             temp = oldInvited.concat(newMembers);
             let temp2 = [];
+            let flag = true;
             for(i = 0; i<temp.length; i++){
 
                 if(!this.memberExists(temp[i])){ //
                     temp2.push(temp[i]);
+                }else{
+                    flag = false;
                 }
             }///
 
-            Meteor.call("updateGroupInvited", this.state.targetGroupID, temp2);
+                Meteor.call("updateGroupInvited", this.state.targetGroupID, temp2);
+
+
+
         }
         if(newAdmins.length > 0){
             temp = newAdmins.split(",");
@@ -681,7 +695,7 @@ export class ChatPage extends Component{
                                         Add Admin(s): <input id="uname" name="admin" type="text" placeholder="example, example2"/>
                                     </div>
                                     <div className="Save Changes">
-                                        <br></br> <input type="submit" value="Create Group" id="register"/>
+                                        <br></br> <input type="submit" value="Save Changes" id="register"/>
                                     </div>
                                 </div>
                             </form>

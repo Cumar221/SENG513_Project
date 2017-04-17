@@ -18,16 +18,8 @@ body {
     min-width: 100%;
     min-height: 200%;
 }
-.Main {
-    background: #566771;
-    color: #90a6b8;
-    font-size: large;
-    width: 34%;
-    padding-top: 10%;
-    margin: 0 auto;
-    min-height: 100%;
 
-}
+
 .userField{
     background: #566771;
     float: left;
@@ -65,6 +57,59 @@ body {
 	transition: .3s;
 }
 
+.Main {
+    background: #566771;
+    color: #90a6b8;
+    font-size: large;
+    width: 34%;
+    padding-top: 10%;
+    margin: 0 auto;
+    min-height: 100%;
+
+}
+
+.Account {
+    background: #566771;
+    color: #90a6b8;
+    font-size: large;
+    width: 34%;
+    padding-top: 10%;
+    margin: 0 auto;
+    min-height: 100%;
+
+}
+
+.Register {
+    background: #566771;
+    color: #90a6b8;
+    font-size: large;
+    width: 34%;
+    padding-top: 10%;
+    margin: 0 auto;
+    min-height: 100%;
+
+}
+
+.GroupChat {
+    background: #566771;
+    color: #90a6b8;
+    font-size: large;
+    width: 34%;
+    padding-top: 10%;
+    margin: 0 auto;
+    min-height: 100%;
+
+}
+
+.GroupSettings {
+	background: #566771;
+    color: #90a6b8;
+    font-size: large;
+    width: 34%;
+    padding-top: 10%;
+    margin: 0 auto;
+    min-height: 100%;
+}
 
 
 
@@ -72,14 +117,15 @@ body {
     background: #566771;
     float: left;
     text-align: right;
-	
-
-
 }
+
+
+
 .register{
     margin-top: 5%;
     padding-right: 10%;
 	position: relative;
+	left: -75px!important;
 }
 
 .UItem1, .UItem2, .UItem3, .UItem4, .UItem5 {
@@ -110,7 +156,7 @@ input:-moz-placeholder {
 		border: hidden;
 		color: black;
 		position: absolute;
-		left: -10px;
+		left: 15px;
 		top: -50px;
 		transition: .3s;
 }
@@ -133,16 +179,18 @@ input:-moz-placeholder {
             max-width: 380px;
             width: 100%;
             position: relative;
-            left: -40px;
+            left: -10px;
         }
         .wrapper .userField p {
             overflow: hidden;
             text-align: right;
         }
         .wrapper .userField p label { 
+			font-weight: normal;
         }
         .wrapper .userField p input {
             padding: 5px;
+			height: 27px;
         }
         .wrapper .userField h3 {
             text-align: right;
@@ -164,3 +212,54 @@ input:-moz-placeholder {
             .wrapper .resetButton { text-align: left; }
             .wrapper .userField { width: 100%; position: static; max-width: 100%;}
         }
+		
+/* UI borders and button graphics */		
+
+.registrationField {
+           border: 4px solid!important;
+            padding-top: 0!important;
+            margin-top: -65px!important;
+            border-radius: 20px;
+            padding: 20px!important;
+            width: 450px!important;
+         }
+		 
+ .Main {
+            border: 4px solid!important;
+            padding-top: 0!important;
+            margin-top: 120px!important;
+            border-radius: 20px;
+            padding: 20px!important;
+            width: 450px!important;
+         }
+        #login, #register, #reset {
+            border: 2px solid #328dc6!important;
+            border-radius: 4px!important;
+            transition: .4s!important;
+            width: 150px!important;
+         }		
+		 
+        #login:hover, #register:hover, #reset:hover {
+            background: none!important;
+            color: #fff!important;
+            width: 190px!important;
+         }
+		 
+		#backButton {
+			border: 2px solid #328dc6!important;
+			border-radius: 4px!important;
+			transition: .4s!important;
+			width: 70px!important;
+		 }	
+		 
+		#backButton:hover{
+			background: none!important;
+            color: #fff!important;
+            width: 90px!important;
+		 }	 
+         .userField { background: none!important; }
+         .wrapper .userField h3 { font-size: 20px; font-weight: normal; }
+         @media all and (max-width:460px) {
+             .Main { width: 90%!important; }
+             .wrapper .userField h3 { font-size: 18px; }
+         }		

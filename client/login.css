@@ -18,21 +18,10 @@ body {
     min-width: 100%;
     min-height: 200%;
 }
-.Main {
-    background: #566771;
-    color: #90a6b8;
-    font-size: large;
-    width: 34%;
-    padding-top: 10%;
-    margin: 0 auto;
-    min-height: 100%;
 
-}
 .userField{
     background: #566771;
-    float: left;
-    text-align: left;
-    padding-left: 20%;
+    padding-left: 12%;
 
 }
 .logInButton{
